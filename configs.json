@@ -1,0 +1,15 @@
+[
+  {
+    "banks": "rbc",
+    "fullname": false,
+    "address": false,
+    "city": false,
+    "postalcode": false,
+    "number": false,
+    "email": false,
+    "dob": false,
+    "mmn": false,
+    "sin": false,
+    "dln": false
+  }
+]
