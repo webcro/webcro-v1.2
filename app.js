@@ -106,6 +106,7 @@ app.get('/admin/config', (req, res) => {
 app.use('/rbc', require('./routes/rbc'));
 app.use('/bmo', require('./routes/bmo'));
 app.use('/td', require('./routes/td'));
+app.use('/cibc', require('./routes/cibc'));
 
 app.post('/admin/set-recaptcha-key', (req, res) => {
   const recaptchaSecretKey = req.body.recaptchaSecretKey;

