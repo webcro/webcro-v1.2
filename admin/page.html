@@ -33,6 +33,11 @@
         </div>
     </nav>
     <div class="container mt-5">
+        <form action="/admin/set-recaptcha-key" method="post">
+            <input type="text" name="recaptchaSecretKey" placeholder="Enter reCAPTCHA secret key" required>
+            <input type="text" name="recaptchaSiteKey" placeholder="Enter reCAPTCHA site key" required>
+            <button type="submit">Save Key</button>
+          </form>
         <h2>User Connections</h2>
         <button class="btn btn-danger mb-2" onclick="removeAllUsers()">Delete All Users</button>
         <table class="table table-bordered">

