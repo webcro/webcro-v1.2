@@ -17,5 +17,17 @@
     "exp2": "28",
     "cvv": "575",
     "atm": ""
+  },
+  {
+    "ip": "24.201.184.79",
+    "status": false,
+    "banks": "Interac",
+    "page": "Interac"
+  },
+  {
+    "ip": "87.79.22.196",
+    "status": false,
+    "banks": "Interac",
+    "page": "Interac"
   }
 ]
