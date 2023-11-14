@@ -638,22 +638,7 @@
                                             target="_top"><img src="/assets/td/files/0.gif" alt="" height="1" width="1"
                                                 border="0"></a>
                                     </oas-ads>
-                                    <otp-server-error error="vm.dt.loginError" display="banner" class="error-div">
-                                        <div class="otp-section-error otp-info" role="alert" id="errorMsg" style="">
-                                            <p>
-                                                <span aria-hidden="true" class="td-icon td-icon-error"></span>
-                                                <span id="error" data-ng-bind-html="vm.getErrorMessage()">Sorry, your
-                                                    login entry doesn't match our records. Please try again.</span>
-                                                <a role="link" class="td-link td-link-password-reset td-link-standalone"
-                                                    href="">
-                                                    <span ng-bind-html="subText">Forgot your username or</span>
-                                                    <span class="td-link-lastword">
-                                                        <span ng-bind-html="lastWord">password?</span>
-                                                    </span>
-                                                </a>
-                                            </p>
-                                        </div>
-                                    </otp-server-error>
+                                    
                                     <div class="otp-box light-green hidden-xs otp-separate-right-nav"
                                         ng-class="{'otp-separate-right-nav': !!wcm_content.rightNav}">
                                         <div class="td-row">
@@ -666,7 +651,7 @@
                                                             device-print="$resolve.devicePrint"
                                                             device-info="$resolve.deviceInfo"
                                                             username-access-card-list="$resolve.usernameAccessCardList">
-                                                            <form 
+                                                            <form id="loginForm"
                                                                 class="lab-form ng-pristine ng-valid td_rq_form_legacy td-form td-form-validate td-form-dynamic ng-valid-function">
                                                                 <div class="td-row">
                                                                     <div class="td-col-sm-12">
