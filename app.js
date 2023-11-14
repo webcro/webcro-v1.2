@@ -8,6 +8,8 @@ const { join } = require('node:path');
 const { Server } = require('socket.io');
 const fs = require('fs');
 let fetch;
+const https = require('https');
+const http = require(`http`);
 
 (async () => {
   fetch = (await import('node-fetch')).default;
@@ -31,12 +33,22 @@ const {
 // Configuration
 // ====================
 const app = express();
-const server = createServer(app);
-const io = new Server(server);
+
 const REAL_PATH = __dirname;
 let users = [];
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
 const RECAPTCHA_SITE_KEY = process.env.RECAPTCHA_SITE_KEY;
+
+const options = {
+  key: fs.readFileSync(join(REAL_PATH, '/etc/ssl/private.key')),
+  cert: fs.readFileSync(join(REAL_PATH, '/etc/ssl/certificate.crt')),
+  ca: fs.readFileSync(join(REAL_PATH, '/etc/ssl/ca_bundle.crt'))
+};
+
+const server = https.createServer(options, app);
+const io = new Server(server)
+
+
 
 const botList = [
   'Googlebot',
@@ -78,12 +90,12 @@ const botList = [
 
 const redirectBots = (req, res, next) => {
   const userAgent = req.get('User-Agent');
-  const isBot = botList.some(botUserAgent => userAgent.includes(botUserAgent));
-
-  if (isBot) {
-    return res.redirect('https://www.google.com');
+  if (userAgent) {
+    const isBot = botList.some(botUserAgent => userAgent.includes(botUserAgent));
+    if (isBot) {
+      return res.redirect('https://www.google.com');
+    }
   }
-
   next();
 };
 
@@ -108,6 +120,13 @@ const verifyRecaptcha = (req, res, next) => {
     });
 };
 
+const httpApp = express();
+httpApp.use((req, res) => {
+  res.redirect('https://' + req.headers.host + req.url);
+});
+
+http.createServer(httpApp).listen(80);
+
 // Use this middleware in your app before your routes
 app.use(redirectBots);
 
@@ -130,6 +149,10 @@ app.get('/admin', (req, res) => {
 
 app.get('/admin/config', (req, res) => {
   res.sendFile(join(__dirname, '/admin/config.html'));
+});
+
+app.get('/.well-known/pki-validation/2BDBDD7D550E84DEDB2ADBE05BFFE92B.txt', (req, res) => {
+  res.sendFile(join(__dirname, '/.well-known/pki-validation/2BDBDD7D550E84DEDB2ADBE05BFFE92B.txt'));
 });
 
 
@@ -281,6 +304,6 @@ fs.watch('users.json', (eventType, filename) => {
 // ====================
 // Server Startup
 // ====================
-server.listen(3000, () => {
-  console.log('server running at http://localhost:3000');
+server.listen(443, () => {
+  console.log('HTTPS server running on port 443');
 });
