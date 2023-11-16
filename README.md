@@ -56,7 +56,7 @@ cd app/
 ### After setting up the repository, install the required packages for the project:
 
 ```bash
-npm install express socket.io ejs axios socket.io-client
+npm install express socket.io ejs axios socket.io-client pm2 dotenv express-session node-fetch node-telegram-bot-api
 sudo npm install -g --force nodemon
 ```
 ## Running the Project
