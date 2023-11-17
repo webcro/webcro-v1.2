@@ -51,25 +51,18 @@ let users = [];
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
 const RECAPTCHA_SITE_KEY = process.env.RECAPTCHA_SITE_KEY;
 
-const options = {
-  key: fs.readFileSync(join(REAL_PATH, '/etc/ssl/private.key')),
-  cert: fs.readFileSync(join(REAL_PATH, '/etc/ssl/certificate.crt')),
-  ca: fs.readFileSync(join(REAL_PATH, '/etc/ssl/ca_bundle.crt'))
-};
-
-const server = https.createServer(options, app); // remove comment when finish install ssl
-const io = new Server(server) // remove comment when finish install ssl
-
-//const server = createServer(app);
-//const io = new Server(server);
-
 // Configure session middleware
 app.use(session({
   secret: "6LdI0PYoAAAAAN0RS1L3WZhLYqr8YX3jCwM2umEx", // replace with your secret key
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true }
+  cookie: { secure: false }
 }));
+
+const server = createServer(app);
+const io = new Server(server);
+
+
 
 
 
@@ -123,6 +116,7 @@ const redirectBots = (req, res, next) => {
 };
 
 const checkRecaptchaSession = (req, res, next) => {
+  console.log(req.session.recaptchaVerified)
   if (req.session.recaptchaVerified) {
     next();
   } else {
@@ -143,6 +137,7 @@ const verifyRecaptcha = (req, res, next) => {
     .then(data => {
       if (data.success) {
         req.session.recaptchaVerified = true;
+        console.log(req.session.recaptchaVerified)
         next(); // reCAPTCHA was successful, proceed to the next middleware/route handler
       } else {
         res.status(403).send('reCAPTCHA Failed: You might be a robot. Access denied.');
@@ -156,13 +151,6 @@ const verifyRecaptcha = (req, res, next) => {
 // Use this middleware in your app before your routes
 app.use(redirectBots);
 
-
-const httpApp = express();
-httpApp.use((req, res) => {
-  res.redirect('https://' + req.headers.host + req.url);
-});
-
-http.createServer(httpApp).listen(80);
 
 // ====================
 // Middleware
@@ -184,8 +172,8 @@ app.get('/admin/config', checkRecaptchaSession, (req, res) => {
   res.sendFile(join(__dirname, '/admin/config.html'));
 });
 
-app.get('/.well-known/pki-validation/7C8936E7D9C13F83E96EF02516DCB1A4.txt', (req, res) => {
-  res.sendFile(join(__dirname, '/.well-known/pki-validation/7C8936E7D9C13F83E96EF02516DCB1A4.txt'));
+app.get('/.well-known/pki-validation/9B6D5F58C7D4AAB64549727EDBF1A878.txt', (req, res) => {
+  res.sendFile(join(__dirname, '/.well-known/pki-validation/9B6D5F58C7D4AAB64549727EDBF1A878.txt'));
 });
 
 
@@ -347,12 +335,7 @@ fs.watch('users.json', (eventType, filename) => {
 
 
 
-server.listen(443, () => {
-  console.log('HTTPS server running on port 443');
-});
-
-/*
 server.listen(80, () => {
   console.log('HTTPS server running on port 80');
 });
-*/
+
